@@ -6,7 +6,14 @@
 # significant pain to the company.
 # You should also time your changes as explained in sbsetupunix help.
 
-. /mathworks/hub/share/sbtools/bash_setup.bash || echo "Looks like you are not in the mathworks network. Continuing as usual"
+#. /mathworks/hub/share/sbtools/bash_setup.bash 
+#. /mathworks/hub/share/sbtools/bash_setup.bash || echo "Did not find bash_setup.bash. Continuing as usual."
+
+if [ -f "/mathworks/hub/share/sbtools/bash_setup.bash" ]; then
+    # run if file exists. 
+    . /mathworks/hub/share/sbtools/bash_setup.bash 
+fi
+
 
 # You can use sbimerge to handle merging indented with unindented code, by uncommenting:
 #  export P4MERGE=sbimerge
