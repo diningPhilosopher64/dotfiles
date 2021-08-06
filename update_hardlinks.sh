@@ -1,6 +1,18 @@
 
+function repeat {
+    num="${2:-100}"; printf -- "$1%.0s" $(seq 1 $num);
+}
+
 function print {
-    bash print.sh "$1" "$2"
+    terminalCols=$(tput cols)                                                   
+    argLen=${#1}                                                                
+    offset=$(((terminalCols-argLen)/2))                                         
+
+    printf "\n"                                                                 
+    repeat '#' $((offset-1))                                                    
+    printf " $1 "                                                               
+    repeat '#' $((offset-1))                                                    
+    printf "\n" 
 }
 
 if [ -f ~/.bashrc ]; then
