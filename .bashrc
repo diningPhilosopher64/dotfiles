@@ -126,6 +126,28 @@ function getpid-port {
      lsof -n -i :$1
 }
 
+function repeat { 
+    num="${2:-100}"; printf -- "$1%.0s" $(seq 1 $num); 
+}
+# custom print function for pretty printing aliases/ functions
+function print {
+    terminalCols=$(tput cols)
+    argLen=${#1}
+    offset=$(((terminalCols-argLen)/2))
+    
+    printf "\n"
+    repeat '#' $((offset-1))
+    printf " $1 "
+    repeat '#' $((offset-1))
+    printf "\n"
+    
+
+    # Semifunctional alternate approach
+    #printf '\n%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+    #printf "%-${offset}s $1\n" "#"
+    #printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+}
+
 ########################### general ##########################  
 
 function mkcd {
@@ -143,7 +165,7 @@ alias 'i'='install'
 function kill_process {                                                         
     if [ -z "$1" ]                                                              
     then                                                                        
-       echo "Pass a process name as a parameter"                                
+       print "Pass a process name as a parameter"
     else                                                                        
        pgrep "$1" | xargs kill -9                                               
     fi                                                                          
@@ -164,21 +186,25 @@ alias 'sdist'='rm -rf dist/ ; py setup.py sdist ; pip install dist/*'
 function mkvenv {
     if [ -z "$1" ]
     then
-        echo -e "\n####### Creating virtualenv: .venv #######\n"
+        #echo -e "\n####### Creating virtualenv: .venv #######\n"
+        print "Creating virtualenv: .venv"
         python3 -m venv .venv
         avenv
     else
-        echo -e "\n####### Creating virtualenv: $1 #######\n"
+        print "Creating virtualenv: $1"
         python3 -m venv "$1"
         avenv "$1"
     fi
 
-    echo -e "\n####### Upgrading pip #######\n"
+    #echo -e "\n####### Upgrading pip #######\n"
+    print "Upgrading pip"
     pip install pip --upgrade
 
-    echo -e "\n####### Installing wheel package #######\n"
+    #echo -e "\n####### Installing wheel package #######\n"
+    print "Installing wheel package"
     pip install wheel
-    echo -e "\n####### Activated virtualenv #######\n"
+    #echo -e "\n####### Activated virtualenv #######\n"
+    print "Activated virtualenv"
 }
 
 alias 'mkenv'='mkvenv'
@@ -186,14 +212,14 @@ alias 'mkenv'='mkvenv'
 # Remove a virtual env.
 # If no name is passed will default to .venv
 function rmvenv {
-
     if [ -z "$1" ]
     then
-        echo -e "\n####### Removing virtual env: .venv #######\n"
+        #echo -e "\n####### Removing virtual env: .venv #######\n"
+        print "Removing virtualenv: .venv"
         python3 -m venv .venv
         rm -rf .venv
     else
-        echo -e "\n####### Removing virtual env: $1 #######\n"
+        print "Removing virtualenv: $1"
         rm -rf "$1"
     fi
 }
@@ -206,10 +232,12 @@ function avenv {
 
     if [ -z "$1" ]
     then
-        echo -e "\n####### Activating virtualenv: .venv #######\n"
+        #echo -e "\n####### Activating virtualenv: .venv #######\n"
+        print "Activating virtualenv: .venv" 
         source .venv/bin/activate || echo "Failed to activate virtualenv: .venv"  
     else
-        echo -e "\n####### Activating virtualenv: $1 #######\n"
+        #echo -e "\n####### Activating virtualenv: $1 #######\n"
+        print "Activating virtualenv: $1" 
         source "$1"/bin/activate  || echo "Failed to activate virtualenv: $1"
     fi
 }
@@ -398,7 +426,7 @@ alias 'ns'='echo "running command: HOST=localhost npm start" HOST=localhost npm 
 function ni {
     if [ -z "$1" ]
     then
-        echo -e "###### Installing packages from package.json ######"
+        print "Installing packages from package.json"
         npm install
     else
         npm install "$1"
@@ -409,6 +437,8 @@ function ni {
 ########################## docker ########################## 
 alias 'dps'='docker ps'
 alias 'dpsa'='docker ps -a'
+alias 'd'='docker'
+
 
 # "Private" generic function which is used in the below functions
 function __dex  {
@@ -451,11 +481,8 @@ function dcrmf {
 alias 'sd'='sls deploy -v'
 
 #deploy function
-#alias 'sdf'='sls deploy -f'
-
-#deploy function
 function sdf {
-    sls deploy -f "$1" -v
+    sls deploy function -f "$1" -v
 }
 
 #invoke function with no logs
@@ -479,6 +506,7 @@ function sdifl {
 #Stream logs to console:
 # This is a blocking command
 function sfl {
+    print "Generating logs for $1"
     sls logs -f "$1" -t
 }    
 
