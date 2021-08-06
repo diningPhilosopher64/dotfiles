@@ -27,3 +27,18 @@ if [ -f ~/.bashrc ]; then
     print "Updating hardlink for .bashrc"
     ln .bashrc ~/.bashrc 
 fi
+
+
+
+if [ -f ~/.vimrc ]; then
+    print "Found file ~/.vimrc"
+    #Rename current vimrc file with .vimrc.<current epoch time> 
+    epoch_time=`date +"%Y-%m-%d %T"`
+   
+    print "Renaming ~/.vimrc to ~/.vimrc.$epoch_time"
+    mv ~/.vimrc ~/.vimrc."$epoch_time"
+
+    #Make a new hardlink 
+    print "Updating hardlink for .vimrc"
+    ln .vimrc ~/.vimrc 
+fi
