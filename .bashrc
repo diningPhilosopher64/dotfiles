@@ -9,7 +9,7 @@
 #. /mathworks/hub/share/sbtools/bash_setup.bash 
 #. /mathworks/hub/share/sbtools/bash_setup.bash || echo "Did not find bash_setup.bash. Continuing as usual."
 
-if [ -f "/mathworks/hub/share/sbtools/bash_setup.bash" ]; then
+if [ -f /mathworks/hub/share/sbtools/bash_setup.bash ]; then
     # run if file exists. 
     . /mathworks/hub/share/sbtools/bash_setup.bash 
 fi
@@ -126,21 +126,23 @@ function getpid-port {
      lsof -n -i :$1
 }
 
-function repeat { 
-    num="${2:-100}"; printf -- "$1%.0s" $(seq 1 $num); 
-}
+#function repeat { 
+    #num="${2:-100}"; printf -- "$1%.0s" $(seq 1 $num); 
+#    bash repeat.sh "$1" "$2"
+#}
 # custom print function for pretty printing aliases/ functions
 function print {
-    terminalCols=$(tput cols)
-    argLen=${#1}
-    offset=$(((terminalCols-argLen)/2))
+    #terminalCols=$(tput cols)
+    #argLen=${#1}
+    #offset=$(((terminalCols-argLen)/2))
     
-    printf "\n"
-    repeat '#' $((offset-1))
-    printf " $1 "
-    repeat '#' $((offset-1))
-    printf "\n"
-    
+    #printf "\n"
+    #repeat '#' $((offset-1))
+    #printf " $1 "
+    #repeat '#' $((offset-1))
+    #printf "\n"
+
+    bash print.sh "$1" "$2"    
 
     # Semifunctional alternate approach
     #printf '\n%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
