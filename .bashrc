@@ -126,28 +126,9 @@ function getpid-port {
      lsof -n -i :$1
 }
 
-#function repeat { 
-    #num="${2:-100}"; printf -- "$1%.0s" $(seq 1 $num); 
-#    bash repeat.sh "$1" "$2"
-#}
 # custom print function for pretty printing aliases/ functions
 function print {
-    #terminalCols=$(tput cols)
-    #argLen=${#1}
-    #offset=$(((terminalCols-argLen)/2))
-    
-    #printf "\n"
-    #repeat '#' $((offset-1))
-    #printf " $1 "
-    #repeat '#' $((offset-1))
-    #printf "\n"
-
     bash print.sh "$1" "$2"    
-
-    # Semifunctional alternate approach
-    #printf '\n%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
-    #printf "%-${offset}s $1\n" "#"
-    #printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 }
 
 ########################### general ##########################  
@@ -188,7 +169,6 @@ alias 'sdist'='rm -rf dist/ ; py setup.py sdist ; pip install dist/*'
 function mkvenv {
     if [ -z "$1" ]
     then
-        #echo -e "\n####### Creating virtualenv: .venv #######\n"
         print "Creating virtualenv: .venv"
         python3 -m venv .venv
         avenv
@@ -198,14 +178,11 @@ function mkvenv {
         avenv "$1"
     fi
 
-    #echo -e "\n####### Upgrading pip #######\n"
     print "Upgrading pip"
     pip install pip --upgrade
 
-    #echo -e "\n####### Installing wheel package #######\n"
     print "Installing wheel package"
     pip install wheel
-    #echo -e "\n####### Activated virtualenv #######\n"
     print "Activated virtualenv"
 }
 
@@ -216,7 +193,6 @@ alias 'mkenv'='mkvenv'
 function rmvenv {
     if [ -z "$1" ]
     then
-        #echo -e "\n####### Removing virtual env: .venv #######\n"
         print "Removing virtualenv: .venv"
         python3 -m venv .venv
         rm -rf .venv
@@ -234,11 +210,9 @@ function avenv {
 
     if [ -z "$1" ]
     then
-        #echo -e "\n####### Activating virtualenv: .venv #######\n"
         print "Activating virtualenv: .venv" 
         source .venv/bin/activate || echo "Failed to activate virtualenv: .venv"  
     else
-        #echo -e "\n####### Activating virtualenv: $1 #######\n"
         print "Activating virtualenv: $1" 
         source "$1"/bin/activate  || echo "Failed to activate virtualenv: $1"
     fi
@@ -252,11 +226,11 @@ function dvenv {
 
     if [ -z "$1" ]
     then
-    echo -e "\n####### Deactivating virtualenv: .venv #######\n"
-        deactivate || echo "Failed to deactivate virtualenv: .venv"  
+        print "Deactiving virtualenv: .venv"
+        deactivate || print "Failed to deactivate virtualenv: .venv"
     else
-    echo -e "\n####### Deactivating virtualenv: $1 #######\n"
-        deactivate "$1" || echo "Failed to deactivate virtualenv: $1"  
+        print "Deactiving virtualenv: $1" 
+        deactivate "$1" || print "Failed to deactivate virtualenv: $1"
     fi
 }
 alias 'denv'='dvenv'
@@ -298,19 +272,19 @@ function ga {
 
 function gfmr {
     default_repo="https://insidelabs-git.mathworks.com/cit/mathworks/jupyter-matlab-proxy.git "
-    echo -e "\n####### Cloning default repo #######\n"
+    print "Cloning default repo: jupyter-matlab-proxy from insidelabs"
     git clone $default_repo . || echo -e "Failed to clone repo" 
-    echo -e "\n####### Fetching merge-request #######\n"
-    git fetch origin merge-requests/"$1"/head:"$2" || echo -e "Failed to fetch branch $2 of merge-request $1"
+    print "Fething merge request !$1 with branch name: $2"
+    git fetch origin merge-requests/"$1"/head:"$2" || print "Failed to fetch branch $2 of merge-request $1"
 }
 
 function gfmrip {
     gfmr "$1" "$2"
     mkvenv
     avenv
-    echo -e "\n####### Installing dependencies #######\n"
+    print "Installing dependencies"
     pip install -e .[DEV]
-    echo -e "\n####### Checking out to branch $2 #######\n"
+    print "Checking out to branch $2"
     git checkout "$2"
 }
 
