@@ -666,18 +666,18 @@ function tmks {
     
     if [ -z "$2"]
     then
-        if t new-session -s "$1" bash > /dev/null 2>&1; then
+        if t new-session -s "$1" /bin/bash > /dev/null 2>&1; then
             print "Created session on a new server with name $1"
         else
             print "Already in a session. Will create a detached session with name $1"
-            t new-session -d -s "$1" bash 
+            t new-session -d -s "$1" /bin/bash 
         fi
     else
-        if t new-session -s "$1" -c "$2" bash > /dev/null 2>&1; then
+        if t new-session -s "$1" -c "$2" /bin/bash > /dev/null 2>&1; then
             print "Created session on a new server with name $1 and path $2"
         else
             print "Already in a session. Will create a detached session with name $1 and path $2"
-            t new-session -d -s "$1" -c "$2" bash 
+            t new-session -d -s "$1" -c "$2" /bin/bash 
         fi
 
     fi
