@@ -127,8 +127,12 @@ function openf {
     elif [ "$1" = "vrc" ]                                                       
     then                                                                        
         vim ~/.vimrc                                                            
-                                                                                
-    else                                                                        
+
+    elif [ "$1" = "ssh" ]
+    then
+         vim ~/.ssh/config 
+
+else                                                                        
         echo "Unknown param: $1"                                                
     fi                                                                          
 }   
