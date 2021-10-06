@@ -361,10 +361,6 @@ function gaddremote {
         git remote add "$1" "$2"
 }
 
-function grmremote {
-        git remote rm "$1"
-}
-
 function grenameremote {
     git remote rename "$1" "$2"
 }
@@ -554,15 +550,6 @@ function dcrmf {
     docker container rm -f "$@"
 }
 
-# Remove arbitrary number of  docker images
-function dirm {
-    docker image rm "$@"
-}
-
-# Force remove arbitrary number of docker images
-function dirmf {
-    docker image rm -f "$@"
-}
 
 
 ########################## Serverless Framework ########################## 
@@ -574,9 +561,6 @@ function dirmf {
 
 #deploy project
 alias 'sd'='sls deploy -v'
-
-#remove project
-alias 'sd'='sls remove -v'
 
 #deploy function
 function sdf {
@@ -629,9 +613,13 @@ function t {
 function ta {
     if [ -z "$1" ]
     then
-        tmux attach 
+        chosen_session=$(tls | fzf)
+        arr=(${chosen_session//:/ })
+        session_name=${arr[0]}
+        echo "$session_name"
+        tmux attach -t "$session_name"
     else
-        tmux attach "$1"
+        tmux attach -t "$1"
     fi
 }
 
@@ -674,18 +662,18 @@ function tmks {
     
     if [ -z "$2"]
     then
-        if tmux new-session -s "$1" > /dev/null 2>&1; then
+        if tmux new-session -s "$1" bash > /dev/null 2>&1; then
             print "Created session on a new server with name $1"
         else
             print "Already in a session. Will create a detached session with name $1"
-            tmux new-session -d -s "$1" 
+            tmux new-session -d -s "$1" bash 
         fi
     else
-        if tmux new-session -s "$1" -c "$2" > /dev/null 2>&1; then
+        if tmux new-session -s "$1" -c "$2" bash > /dev/null 2>&1; then
             print "Created session on a new server with name $1 and path $2"
         else
             print "Already in a session. Will create a detached session with name $1 and path $2"
-            tmux new-session -d -s "$1" -c "$2" 
+            tmux new-session -d -s "$1" -c "$2" bash 
         fi
 
     fi
@@ -694,7 +682,7 @@ function tmks {
 
 # Change/Switch to a session
 function tchs {
-    if [ -z "$1"]
+    if [ -z "$1" ]
     then
         print "Error: Pass the name of the session to change to"
         return
@@ -704,9 +692,44 @@ function tchs {
     # session_name and window_name and pane_number.
     # Format is : <session_name>:<window_name>:<pane_number>
 
-    tmux switch-client -t "$1"    
+    tmux switch-client -t "$1" 2> /dev/null
     
 }
+
+# tmux-sessionizer
+function ts {
+    common_directories=(~ ~/Downloads ~/Documents)                                  
+
+    personal_directories=(~/work ~/work/personal)                                   
+    
+    office_directories=(~ /sandbox/skondapa/Projects/fte/jupyter_matlab_proxy /sandbox/skondapa/Projects/fte /work)
+    
+    all_directories+=( "${personal_directories[@]}"  "${office_directories[@]}" "${common_directories[@]}" )
+
+    valid_directories=()                                                            
+                                                                                    
+    for directory in ${all_directories[@]}; do                                      
+        if [ -d $directory ]; then                                                  
+            valid_directories[${#valid_directories[@]}]=$directory                  
+        fi                                                                          
+    done                                                                            
+
+    if [[ $# -eq 1 ]]; then
+        complete_path=$1
+    else
+        complete_path=$(find ${valid_directories[*]} -mindepth 1 -maxdepth 1  -type d | fzf)  
+    fi
+                                                                                    
+    folder_name=$(basename "$complete_path" | tr . _)                                    
+                                                                                    
+    if ! tmux has-session -t "$folder_name"; then                                  
+        tmks "$folder_name" "$complete_path"                                             
+    fi                                                                              
+                                                                                    
+    tchs "$folder_name"   
+}
+
+
 
 ################ tmux window related stuff ################
 
@@ -728,6 +751,22 @@ function tmkw {
        tmux new-window -n "$1"  -c "$2" bash
     fi
 }
+
+
+
+################################# Key Bindings ##################################
+
+# Binds Ctrl + F to launch tmux sessionizer
+
+bind -x '"\C-f":"ts"'
+
+
+
+
+
+
+
+
 
 
 
