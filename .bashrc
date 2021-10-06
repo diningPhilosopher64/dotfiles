@@ -62,6 +62,21 @@ fi
 
 ########################################################################################################
 
+
+# Enable vim shortcuts in bash
+
+set -o vi
+
+
+# Adding custom paths to system path
+
+# Adding anaconda executables to path 
+
+if [ -d /usr/softwares/miniconda3/bin ]; then
+    # Add to system path if directory exists
+    export PATH="/usr/softwares/miniconda3/bin:$PATH"
+fi
+
 # enable color support of ls and also add handy aliases                         
 if [ -x /usr/bin/dircolors ]; then                                              
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -118,6 +133,35 @@ function openf {
     fi                                                                          
 }   
 
+
+# extract any type of compressed file
+extract () {
+  if [ -f $1 ] ; then
+      case $1 in
+          *.tar.bz2)   tar xvjf $1    ;;
+          *.tar.gz)    tar xvzf $1    ;;
+          *.bz2)       bunzip2 $1     ;;
+          *.rar)       rar x $1       ;;
+          *.gz)        gunzip $1      ;;
+          *.tar)       tar xvf $1     ;;
+          *.tbz2)      tar xvjf $1    ;;
+          *.tgz)       tar xvzf $1    ;;
+          *.zip)       unzip $1       ;;
+          *.Z)         uncompress $1  ;;
+          *.7z)        7z x $1        ;;
+          *)           echo "don't know how to extract '$1'..." ;;
+      esac
+  else
+      echo "'$1' is not a valid file!"
+  fi
+}
+
+
+# Adding pipenv virtualenvs path 
+export PATH="/home/skondapa/.local/bin:$PATH"
+
+# export PATH="/usr/softwares/miniconda3/bin:$PATH"  # commented out by conda initialize
+
 #reload/source bashrc
 alias 'sourcerc'='source ~/.bashrc'
 
@@ -141,6 +185,41 @@ function print {
     printf " $1 "
     repeat '#' $((offset-1))
     printf "\n"     
+}
+
+# Clear the screen.
+function c(){
+    clear;
+}
+
+# Show the command line history.
+function h(){
+    history;
+}
+
+# Go back directory level.
+function ..(){
+    builtin cd ..; pwd;
+}
+
+# Go back directory level.
+function ...(){
+    builtin cd ../..; pwd;
+}
+
+# List almost all files with classification.
+function l(){
+    ls --color=auto -F;
+}
+
+# List all files with classification.
+function la(){
+    ls --color=auto -A -F;
+}
+
+# Long list almost all files with classification and a humanly-readable size.
+function ll(){
+    ls --color=auto -A -F -l -h;
 }
 
 ########################### general ##########################  
@@ -219,14 +298,29 @@ alias 'rmenv'='rmvenv'
 # Activate virtual env
 # If no name is passed will default to .venv
 function avenv {
-
+    # If no paramerter is passed try to activate .venv first. If .venv doesnt exist try with the next closest one. If both .venv37 and .venv38 exist. It will pick .venv37
+    # If parameter is passed, try to activate that one
     if [ -z "$1" ]
     then
-        print "Activating virtualenv: .venv" 
-        source .venv/bin/activate || echo "Failed to activate virtualenv: .venv"  
+
+        if [[`source .venv/bin/activate`]] 
+        then
+        
+          source .venv/bin/activate 
+          print "Activated virtualenv: .venv" 
+
+        else   
+
+          print "Failed to activate virtualenv: .venv, trying with .venv*" ; 
+          source .venv*/bin/activate; print "Activated virtualenv : .venv *" || echo "Couldn't find any virtualenv : .venv*"
+
+        fi 
+
     else
-        print "Activating virtualenv: $1" 
-        source "$1"/bin/activate  || echo "Failed to activate virtualenv: $1"
+
+        #ENV_NAME=$(eval 'find -name .*$1')
+         source "$1"/bin/activate; print "Activated virtualenv: $1" || print "Failed to activate virtualenv: $1"
+
     fi
 }
 
@@ -238,11 +332,11 @@ function dvenv {
 
     if [ -z "$1" ]
     then
-        print "Deactiving virtualenv: .venv"
         deactivate || print "Failed to deactivate virtualenv: .venv"
+        print "Deactivated virtualenv"
     else
-        print "Deactiving virtualenv: $1" 
         deactivate "$1" || print "Failed to deactivate virtualenv: $1"
+        print "Deactivated virtualenv" 
     fi
 }
 alias 'denv'='dvenv'
@@ -254,8 +348,7 @@ alias 'gs'='git status'
 alias 'glo'='git log --oneline'
 alias 'gl'='git log'
 alias 'gc'='git commit -m'
-#alias 'ga'='git add'
-alias 'gb'='git branch'
+alias 'glsb'='git branch'
 alias 'gba'='git branch -a'
 alias 'gbv'='git branch -v'
 alias 'gbav'='git branch -av'
@@ -272,14 +365,14 @@ function grenameremote {
     git remote rename "$1" "$2"
 }
 
-function ga {
+# Add files provided as arguments to Git.
+function ga() {
+    git add "$*";
+}
 
-    if [ -z "$1" ]
-    then
-       git add . 
-    else
-        git add
-    fi
+# Add all changed files to Git.
+function gaa() {
+    git add --all;
 }
 
 function gfmr {
@@ -320,19 +413,19 @@ eval "$(starship init bash)"
 
 
 #create new venv
-function cmkvenv(){
+function cmkvenv {
    mkdir -p /usr/softwares/miniconda3/envs/"$1"
 #  mamba create -n "$1" --prefix=/usr/softwares/miniconda3/envs/"$1" python="$2" -y
   conda create  --prefix=/usr/softwares/miniconda3/envs/"$1" python="$2" -y
 }
 alias 'cmkenv'='cmkvenv'
 
-#remove a venv
-function crmvenv(){
-  mamba env remove -n "$1"
+# remove arbitrary number of conda virtual envs
+function crmenv {
+  mamba env remove -n "$@"
 }
 
-alias 'crmenv'='crmvenv'
+alias 'crmvenv'='crmenv'
 
 #list envs
 alias 'clsenv'='mamba env list'
@@ -359,7 +452,7 @@ function caenv {
 
 #deactivate venv
 alias "cdvenv"="conda deactivate"
-alias "cdenv"="conda deactivate"
+alias "cdenv"="cdvenv"
 
 #add channels in conda
 function caddc {
@@ -426,10 +519,11 @@ function ni {
 alias 'dps'='docker ps'
 alias 'dpsa'='docker ps -a'
 alias 'd'='docker'
+alias 'di'='d images'
 
 
 # "Private" generic function which is used in the below functions
-function __dex  {
+function __dex {
     docker exec -it "$1" "$2"
 }
 
@@ -498,6 +592,132 @@ function sfl {
     sls logs -f "$1" -t
 }    
 
+################################ tmux ##################################
+
+# Always assuming you never want to nest anything : sessions, tmux server etc.
+# If making a new session, it will never be a new nested session. It will always
+# be a new session alongside/sibling-of the current session.
+
+
+# To navigate to next  session : prefix + (
+# To navigate to previous  session : prefix + )
+# To navigate to previous  window  : prefix + p
+# To navigate to next  window  : prefix + n
+# To split a window : prefix + %
+
+
+function t {
+    tmux 
+}
+
+function ta {
+    if [ -z "$1" ]
+    then
+        tmux attach 
+    else
+        tmux attach "$1"
+    fi
+}
+
+function td {
+    tmux detach 
+}
+
+
+################ tmux session related stuff ################
+
+# Will kill session and not server.
+# If no sessions left, will kill server.
+function tks {
+    tmux kill-server   
+}
+
+
+function tls {
+    tmux list-sessions  
+}
+
+# When a session is created, always name it, else error out.
+# This will help with fuzzy finding a session and then switching to it. 
+
+#function tmks {
+#    if tmux new-session > /dev/null 2>&1; then
+#        print "Created session on a new server"
+#    else
+#        print "Already in session. Will create a detached session"
+#        tmux new-session -d  
+#    fi
+#}
+
+function tmks {
+    if [ -z "$1" ]
+    then
+        print "Error: tmux session must have a name"
+        return 
+    fi
+    
+    if [ -z "$2"]
+    then
+        if tmux new-session -s "$1" > /dev/null 2>&1; then
+            print "Created session on a new server with name $1"
+        else
+            print "Already in a session. Will create a detached session with name $1"
+            tmux new-session -d -s "$1" 
+        fi
+    else
+        if tmux new-session -s "$1" -c "$2" > /dev/null 2>&1; then
+            print "Created session on a new server with name $1 and path $2"
+        else
+            print "Already in a session. Will create a detached session with name $1 and path $2"
+            tmux new-session -d -s "$1" -c "$2" 
+        fi
+
+    fi
+}
+
+
+# Change/Switch to a session
+function tchs {
+    if [ -z "$1"]
+    then
+        print "Error: Pass the name of the session to change to"
+        return
+    fi
+    
+    # For $1, you can pass either session_name or session_name and window_name or 
+    # session_name and window_name and pane_number.
+    # Format is : <session_name>:<window_name>:<pane_number>
+
+    tmux switch-client -t "$1"    
+    
+}
+
+################ tmux window related stuff ################
+
+#function tmkw {
+#    tmux new-window    
+#}
+
+function tmkw {
+    if [ -z "$1" ]
+    then
+        print "Error: tmux window must have a name"
+        return 
+    fi
+    
+    if [-z "$2"]
+    then
+       tmux new-window -n "$1" bash
+    else
+       tmux new-window -n "$1"  -c "$2" bash
+    fi
+}
+
+
+
+
+
+
 ################################# Temp ##################################
 
 function runInteg {
@@ -519,19 +739,45 @@ if [ -z "$1" ]
     fi
 
     #echo -e "MWI_BASE_URL=${MWI_BASE_URL} MWI_APP_PORT=${MWI_APP_PORT}  matlab-jupyter-app \n \n" 
-     MWI_BASE_URL=$MWI_BASE_URL MWI_APP_PORT=$MWI_APP_PORT  matlab-web-desktop-proxy "$@"  || MWI_BASE_URL=$MWI_BASE_URL MWI_APP_PORT=$MWI_APP_PORT matlab-jupyter-app "$@"
+     MWI_BASE_URL=$MWI_BASE_URL MWI_APP_PORT=$MWI_APP_PORT  matlab-web-desktop-app "$@" ||  MWI_BASE_URL=$MWI_BASE_URL MWI_APP_PORT=$MWI_APP_PORT  matlab-web-desktop-proxy "$@"  || MWI_BASE_URL=$MWI_BASE_URL MWI_APP_PORT=$MWI_APP_PORT matlab-jupyter-app "$@"
 }
 alias 'run_integ'='runInteg'
 alias 'runinteg'='runInteg'
 
-
-alias 'ns'='HOST=localhost npm start'
-
-
-
-
-
+function denvs {
+      print "Exiting out of any virtualenvs"
+      cdenv
+      denv
+}
 
 
+function setup_versions {
 
+    for ((i=1; i<=$#; i++))
+        do
+          denvs
+
+          print "Using python ${!i}"
+          print "Removing any existing folder  .venv${!i}"
+          rm -rf .venv"${!i}"
+          
+          caenv p"${!i}"
+          mkvenv .venv"${!i}"
+          denvs
+
+        done
+}
+
+function install_in_versions {
+    for ((i=1; i<=$#; i++))
+        do
+          setup_versions "${!i}"
+
+          avenv .venv"${!i}"
+          pip install .[dev]
+          print "Finished installing package in .venv${!i}"
+          denv
+          
+        done
+}
 
