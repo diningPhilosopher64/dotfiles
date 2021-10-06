@@ -554,6 +554,15 @@ function dcrmf {
     docker container rm -f "$@"
 }
 
+# Remove arbitrary number of  docker images
+function dirm {
+    docker image rm "$@"
+}
+
+# Force remove arbitrary number of docker images
+function dirmf {
+    docker image rm -f "$@"
+}
 
 
 ########################## Serverless Framework ########################## 
@@ -565,6 +574,9 @@ function dcrmf {
 
 #deploy project
 alias 'sd'='sls deploy -v'
+
+#remove project
+alias 'sd'='sls remove -v'
 
 #deploy function
 function sdf {
