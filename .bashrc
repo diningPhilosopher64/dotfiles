@@ -361,6 +361,10 @@ function gaddremote {
         git remote add "$1" "$2"
 }
 
+function grmremote {
+        git remote rm "$1"
+}
+
 function grenameremote {
     git remote rename "$1" "$2"
 }
