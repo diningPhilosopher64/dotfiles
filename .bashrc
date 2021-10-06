@@ -611,7 +611,7 @@ function sfl {
 
 
 function t {
-    tmux 
+    tmux -u
 }
 
 function ta {
@@ -621,9 +621,9 @@ function ta {
         arr=(${chosen_session//:/ })
         session_name=${arr[0]}
         echo "$session_name"
-        tmux attach -t "$session_name"
+        t attach -t "$session_name"
     else
-        tmux attach -t "$1"
+        t attach -t "$1"
     fi
 }
 
@@ -637,12 +637,12 @@ function td {
 # Will kill session and not server.
 # If no sessions left, will kill server.
 function tks {
-    tmux kill-server   
+    t kill-server   
 }
 
 
 function tls {
-    tmux list-sessions  
+    t list-sessions  
 }
 
 # When a session is created, always name it, else error out.
@@ -666,18 +666,18 @@ function tmks {
     
     if [ -z "$2"]
     then
-        if tmux new-session -s "$1" bash > /dev/null 2>&1; then
+        if t new-session -s "$1" bash > /dev/null 2>&1; then
             print "Created session on a new server with name $1"
         else
             print "Already in a session. Will create a detached session with name $1"
-            tmux new-session -d -s "$1" bash 
+            t new-session -d -s "$1" bash 
         fi
     else
-        if tmux new-session -s "$1" -c "$2" bash > /dev/null 2>&1; then
+        if t new-session -s "$1" -c "$2" bash > /dev/null 2>&1; then
             print "Created session on a new server with name $1 and path $2"
         else
             print "Already in a session. Will create a detached session with name $1 and path $2"
-            tmux new-session -d -s "$1" -c "$2" bash 
+            t new-session -d -s "$1" -c "$2" bash 
         fi
 
     fi
@@ -696,7 +696,7 @@ function tchs {
     # session_name and window_name and pane_number.
     # Format is : <session_name>:<window_name>:<pane_number>
 
-    tmux switch-client -t "$1" 2> /dev/null
+    t switch-client -t "$1" 2> /dev/null
     
 }
 
@@ -726,7 +726,7 @@ function ts {
                                                                                     
     folder_name=$(basename "$complete_path" | tr . _)                                    
                                                                                     
-    if ! tmux has-session -t "$folder_name"; then                                  
+    if ! t has-session -t "$folder_name"; then                                  
         tmks "$folder_name" "$complete_path"                                             
     fi                                                                              
                                                                                     
@@ -750,9 +750,9 @@ function tmkw {
     
     if [-z "$2"]
     then
-       tmux new-window -n "$1" bash
+       t new-window -n "$1" bash
     else
-       tmux new-window -n "$1"  -c "$2" bash
+       t new-window -n "$1"  -c "$2" bash
     fi
 }
 
