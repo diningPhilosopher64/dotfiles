@@ -748,7 +748,7 @@ function tmkw {
         return 
     fi
     
-    if [-z "$2" ]
+    if [ -z "$2" ]
     then
        t new-window -n "$1" bash
     else
