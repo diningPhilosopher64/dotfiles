@@ -609,21 +609,21 @@ function sfl {
 # To navigate to next  window  : prefix + n
 # To split a window : prefix + %
 
+function __select_session {
+    chosen_session=$(tls | fzf)
+    arr=(${chosen_session//:/ })
+    session_name=${arr[0]}
+    #return session_name
 
-function t {
-    tmux -u
 }
 
 function ta {
     if [ -z "$1" ]
     then
-        chosen_session=$(tls | fzf)
-        arr=(${chosen_session//:/ })
-        session_name=${arr[0]}
-        echo "$session_name"
-        t attach -t "$session_name"
+        __select_session session_name
+        tmux attach -t "$session_name"
     else
-        t attach -t "$1"
+        tmux -u attach -t "$1"
     fi
 }
 
@@ -637,25 +637,16 @@ function td {
 # Will kill session and not server.
 # If no sessions left, will kill server.
 function tks {
-    t kill-server   
+    tmux kill-server   
 }
 
 
 function tls {
-    t list-sessions  
+    tmux list-sessions  
 }
 
 # When a session is created, always name it, else error out.
 # This will help with fuzzy finding a session and then switching to it. 
-
-#function tmks {
-#    if tmux new-session > /dev/null 2>&1; then
-#        print "Created session on a new server"
-#    else
-#        print "Already in session. Will create a detached session"
-#        tmux new-session -d  
-#    fi
-#}
 
 function tmks {
     if [ -z "$1" ]
@@ -664,20 +655,20 @@ function tmks {
         return 
     fi
     
-    if [ -z "$2"]
+    if [ -z "$2" ]
     then
-        if t new-session -s "$1" /bin/bash > /dev/null 2>&1; then
+        if tmux -u new-session -s "$1" /bin/bash > /dev/null 2>&1; then
             print "Created session on a new server with name $1"
         else
             print "Already in a session. Will create a detached session with name $1"
-            t new-session -d -s "$1" /bin/bash 
+            tmux -u new-session -d -s "$1" /bin/bash 
         fi
     else
-        if t new-session -s "$1" -c "$2" /bin/bash > /dev/null 2>&1; then
+        if tmux -u new-session -s "$1" -c "$2" /bin/bash > /dev/null 2>&1; then
             print "Created session on a new server with name $1 and path $2"
         else
             print "Already in a session. Will create a detached session with name $1 and path $2"
-            t new-session -d -s "$1" -c "$2" /bin/bash 
+            tmux -u new-session -d -s "$1" -c "$2" /bin/bash 
         fi
 
     fi
@@ -688,15 +679,16 @@ function tmks {
 function tchs {
     if [ -z "$1" ]
     then
-        print "Error: Pass the name of the session to change to"
-        return
+        __select_session session_name
+    else 
+        session_name=$1
     fi
     
     # For $1, you can pass either session_name or session_name and window_name or 
     # session_name and window_name and pane_number.
     # Format is : <session_name>:<window_name>:<pane_number>
 
-    t switch-client -t "$1" 2> /dev/null
+    tmux switch-client -t $session_name 2> /dev/null
     
 }
 
@@ -726,7 +718,7 @@ function ts {
                                                                                     
     folder_name=$(basename "$complete_path" | tr . _)                                    
                                                                                     
-    if ! t has-session -t "$folder_name"; then                                  
+    if ! tmux has-session -t "$folder_name"; then                                  
         tmks "$folder_name" "$complete_path"                                             
     fi                                                                              
                                                                                     
@@ -750,9 +742,9 @@ function tmkw {
     
     if [ -z "$2" ]
     then
-       t new-window -n "$1" bash
+       tmux -u new-window -n "$1" bash
     else
-       t new-window -n "$1"  -c "$2" bash
+       tmux -u new-window -n "$1"  -c "$2" bash
     fi
 }
 
