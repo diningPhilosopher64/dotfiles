@@ -610,11 +610,17 @@ function sfl {
 # To split a window : prefix + %
 
 function __select_session {
-    chosen_session=$(tls | fzf)
-    arr=(${chosen_session//:/ })
+    selected_option=$(tls | fzf)
+    arr=(${selected_option//:/ })
     session_name=${arr[0]}
-    #return session_name
+    echo $session_name
+}
 
+function __select_window {
+    selected_option=$(tmux list-windows | fzf) 
+    arr=(${selected_option//:/ })
+    chosen_window=${arr[0]}
+    echo $chosen_window
 }
 
 function ta {
@@ -634,10 +640,12 @@ function td {
 
 ################ tmux session related stuff ################
 
-# Will kill session and not server.
-# If no sessions left, will kill server.
-function tks {
-    tmux kill-server   
+function trmserver {
+    tmux kill-server
+}
+
+function trmsession {
+    tmux kill-session
 }
 
 
@@ -645,10 +653,8 @@ function tls {
     tmux list-sessions  
 }
 
-# When a session is created, always name it, else error out.
-# This will help with fuzzy finding a session and then switching to it. 
 
-function tmks {
+function __tmks {
     if [ -z "$1" ]
     then
         print "Error: tmux session must have a name"
@@ -679,7 +685,7 @@ function tmks {
 function tchs {
     if [ -z "$1" ]
     then
-        __select_session session_name
+        session_name=$(__select_session)
     else 
         session_name=$1
     fi
@@ -693,7 +699,7 @@ function tchs {
 }
 
 # tmux-sessionizer
-function ts {
+function tmux_sessionizer {
     common_directories=(~ ~/Downloads ~/Documents)                                  
 
     personal_directories=(~/work ~/work/personal)                                   
@@ -719,13 +725,13 @@ function ts {
     folder_name=$(basename "$complete_path" | tr . _)                                    
                                                                                     
     if ! tmux has-session -t "$folder_name"; then                                  
-        tmks "$folder_name" "$complete_path"                                             
+        __tmks "$folder_name" "$complete_path"                                             
     fi                                                                              
                                                                                     
     tchs "$folder_name"   
 }
 
-
+alias 'ts'='tmux_sessionizer'
 
 ################ tmux window related stuff ################
 
@@ -748,14 +754,32 @@ function tmkw {
     fi
 }
 
+function tmvw {
+    tmux rename-window "$1"
+}
 
+function tchw {
+    if [ -z "$1" ]
+    then
+        window_name=$(__select_window)
+    else 
+        window_name=$1
+    fi
+    
+    # Will use tchs to change to current active session and the window_name using the format 
+    # Format is : <session_name>:<window_name>:<pane_number>
+
+    current_session_name=$(tmux display-message -p '#S')
+    tchs $current_session_name:$window_name
+}
 
 ################################# Key Bindings ##################################
 
-# Binds Ctrl + F to launch tmux sessionizer
+# Binds Ctrl + t to launch tmux sessionizer
+bind -x '"\C-t":"tmux_sessionizer"'
 
-bind -x '"\C-f":"ts"'
-
+# Binds Ctrl + w to launch tmux sessionizer
+bind -x '"\C-f":"tchw"'
 
 
 
