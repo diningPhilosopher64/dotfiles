@@ -68,7 +68,7 @@ fi
 set -o vi
 
 # if bash is not default shell for the current OS, then it means that this bash is a child process. Adding ssh-agent
-ssh-agent bash
+# ssh-agent bash
 
 
 # Adding custom paths to system path
