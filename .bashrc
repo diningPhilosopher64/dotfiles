@@ -630,7 +630,7 @@ function ta {
     if [ -z "$1" ]
     then
         __select_session session_name
-        tmux attach -t "$session_name"
+        tmux -u attach -t "$session_name"
     else
         tmux -u attach -t "$1"
     fi
