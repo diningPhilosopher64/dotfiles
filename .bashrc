@@ -557,6 +557,15 @@ function dcrmf {
     docker container rm -f "$@"
 }
 
+# Remove arbitrary number of  docker containers
+function dirm {
+    docker image rm "$@"
+}
+
+# Force remove arbitrary number of docker containers
+function dirmf {
+    docker image rm -f "$@"
+}
 
 
 ########################## Serverless Framework ########################## 
