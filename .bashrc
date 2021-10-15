@@ -557,16 +557,31 @@ function drmfc {
     docker container rm -f "$@"
 }
 
-# Remove arbitrary number of  docker containers
+# Remove arbitrary number of  docker images
 function drmi {
     docker image rm "$@"
 }
 
-# Force remove arbitrary number of docker containers
+# Force remove arbitrary number of docker images
 function drmfi {
     docker image rm -f "$@"
 }
 
+# When run interactively, you want to use a shell
+# docker run bash
+function drrmit {
+    docker run --rm -it "$1" bash
+}
+
+# docker run sh
+function drrmits {
+    docker run --rm -it "$1" sh
+}
+
+# When run in detached mode, you may want to pass an arg
+function drd {
+    docker run -d "$1" "$2"
+}
 
 ########################## Serverless Framework ########################## 
 
