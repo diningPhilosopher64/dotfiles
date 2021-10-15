@@ -526,7 +526,7 @@ function ni {
 alias 'dps'='docker ps'
 alias 'dpsa'='docker ps -a'
 alias 'd'='docker'
-alias 'di'='d images'
+alias 'dlsi'='d images'
 
 
 # "Private" generic function which is used in the below functions
@@ -548,22 +548,22 @@ function dexs {
 alias 'dex'='dexb'
 
 # Remove arbitrary number of  docker containers
-function dcrm {
+function drmc {
     docker container rm "$@"
 }
 
 # Force remove arbitrary number of docker containers
-function dcrmf {
+function drmfc {
     docker container rm -f "$@"
 }
 
 # Remove arbitrary number of  docker containers
-function dirm {
+function drmi {
     docker image rm "$@"
 }
 
 # Force remove arbitrary number of docker containers
-function dirmf {
+function drmfi {
     docker image rm -f "$@"
 }
 
