@@ -11,6 +11,7 @@ set tabstop=4 softtabstop=4
 set expandtab                                                                   
 set smartindent
 
+
 " New changes 
 
 filetype on
@@ -29,4 +30,11 @@ set smartcase
 
 set splitbelow splitright
 
+" Remaps 
 
+
+imap jk <Esc>
+imap jj <Esc>
+imap kj <Esc>
+
+nnoremap Y y$
