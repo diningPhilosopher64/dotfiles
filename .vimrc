@@ -11,6 +11,8 @@ set tabstop=4 softtabstop=4
 set expandtab                                                                   
 set smartindent
 
+"set signcolumn=yes
+
 
 " New changes 
 
@@ -22,9 +24,6 @@ set autoindent
 
 set backspace=indent,eol,start
 
-" When you yank something, it will copy to system clipboard as well.
-set clipboard=unnampedplus
-
 " When using / for search, will smartly search for case sensitive and insensitive
 set smartcase
 
@@ -33,8 +32,10 @@ set splitbelow splitright
 " Remaps 
 
 
-imap jk <Esc>
-imap jj <Esc>
-imap kj <Esc>
+inoremap jk <Esc>
+inoremap jj <Esc>
+inoremap kj <Esc>
 
 nnoremap Y y$
+
+

@@ -62,9 +62,10 @@ fi
 
 ########################################################################################################
 
+# env vars
+export NODE_PATH="/usr/softwares/node-v14.16.0-linux-x64/lib/node_modules/"
 
 # Enable vim shortcuts in bash
-
 set -o vi
 
 # if bash is not default shell for the current OS, then it means that this bash is a child process. Adding ssh-agent
@@ -135,7 +136,7 @@ function openf {
     then
          vim ~/.ssh/config 
 
-else                                                                        
+    else                                                                        
         echo "Unknown param: $1"                                                
     fi                                                                          
 }   
@@ -382,6 +383,12 @@ function gaa() {
     git add --all;
 }
 
+# Add all tracked files. Ignores untracked files.
+function gau() {
+    git add -u;
+}
+
+# Fetch repo and fetch merge request
 function gfmr {
     default_repo="https://insidelabs-git.mathworks.com/cit/mathworks/jupyter-matlab-proxy.git "
     print "Cloning default repo: jupyter-matlab-proxy from insidelabs"
@@ -390,6 +397,7 @@ function gfmr {
     git fetch origin merge-requests/"$1"/head:"$2" || print "Failed to fetch branch $2 of merge-request $1"
 }
 
+# Fetch repo and fetch merge request and install packages
 function gfmrip {
     gfmr "$1" "$2"
     mkvenv
@@ -486,7 +494,7 @@ function cip {
 alias 'crmp'='mamba uninstall -y'
 
 #list channels in conda
-function clsc {
+function clsch {
   conda config --show channels
 }
 
@@ -746,7 +754,7 @@ function tmux_sessionizer {
     if [[ $# -eq 1 ]]; then
         complete_path=$1
     else
-        complete_path=$(find ${valid_directories[*]} -mindepth 1 -maxdepth 1  -type d | fzf)  
+        complete_path=$(find ${valid_directories[*]} -mindepth 1 -maxdepth 2  -type d | fzf)  
     fi
                                                                                     
     folder_name=$(basename "$complete_path" | tr . _)                                    
@@ -806,7 +814,7 @@ function tchw {
 bind -x '"\C-t":"tmux_sessionizer"'
 
 # Binds Ctrl + w to launch tmux sessionizer
-bind -x '"\C-f":"tchw"'
+bind -x '"\C-w":"tchw"'
 
 
 
