@@ -384,7 +384,7 @@ function gaa() {
 }
 
 # Add all tracked files. Ignores untracked files.
-function gau() {
+function gaat() {
     git add -u;
 }
 
@@ -780,10 +780,11 @@ function tmkw {
         print "Error: tmux window must have a name"
         return 
     fi
-    
+   
+    cwd=$(pwd)
     if [ -z "$2" ]
     then
-       tmux -u new-window -n "$1" bash
+       tmux -u new-window -n "$1" -c cd $cwd  bash
     else
        tmux -u new-window -n "$1"  -c "$2" bash
     fi
@@ -813,8 +814,8 @@ function tchw {
 # Binds Ctrl + t to launch tmux sessionizer
 bind -x '"\C-t":"tmux_sessionizer"'
 
-# Binds Ctrl + w to launch tmux sessionizer
-bind -x '"\C-w":"tchw"'
+# Binds Ctrl + f to launch tmux sessionizer
+bind -x '"\C-f":"tchw"'
 
 
 
