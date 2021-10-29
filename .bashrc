@@ -357,13 +357,14 @@ alias 'glo'='git log --oneline'
 alias 'gl'='git log'
 alias 'gc'='git commit -m'
 alias 'glsb'='git branch'
-alias 'gba'='git branch -a'
-alias 'gbv'='git branch -v'
+alias 'glsba'='git branch -a'
+alias 'glsbv'='git branch -v'
 alias 'gbav'='git branch -av'
-alias 'gcb'='git checkout'
-alias 'gsl'='git stash list'
+alias 'glss'='git stash list'
 alias 'gsp'='git stash push -m'
 alias 'glsremote'='git remote -v'
+
+
 
 function gaddremote {
         git remote add "$1" "$2"
@@ -376,6 +377,10 @@ function grenameremote {
 # Add files provided as arguments to Git.
 function ga() {
     git add "$*";
+}
+
+function gchb {
+    git checkout `glsbv | fzf --reverse | awk '{print $1}'`
 }
 
 # Add all changed files to Git.
