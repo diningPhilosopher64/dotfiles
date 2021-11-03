@@ -63,7 +63,7 @@ fi
 ########################################################################################################
 
 # env vars
-export NODE_PATH="/usr/softwares/node-v14.16.0-linux-x64/lib/node_modules/"
+# export NODE_PATH="/usr/softwares/node-v14.16.0-linux-x64/lib/node_modules/"
 
 # Enable vim shortcuts in bash
 set -o vi
@@ -258,10 +258,19 @@ alias 'killProcess'='kill_process'
 
 
 ###########################python/pip##########################  
-alias 'pi'='pip install'
 alias 'pirm'='pip uninstall -y'
 alias 'py'='python'
 alias 'sdist'='rm -rf dist/ ; py setup.py sdist ; pip install dist/*'
+
+# Pip install 
+function pi {
+    if [ -z "$1" ]
+    then 
+        pip install .
+    else 
+        pip install "$1"
+    fi
+}
 
 # Create new venv using python3
 # If no name is passed will default to .venv
@@ -311,22 +320,18 @@ function avenv {
     if [ -z "$1" ]
     then
 
-        if [[`source .venv/bin/activate`]] 
+        if [ -d ".venv" ] 
         then
-        
-          source .venv/bin/activate 
-          print "Activated virtualenv: .venv" 
+            source .venv/bin/activate 
+            print "Activated virtualenv: .venv" 
 
         else   
-
-          print "Failed to activate virtualenv: .venv, trying with .venv*" ; 
-          source .venv*/bin/activate; print "Activated virtualenv : .venv *" || echo "Couldn't find any virtualenv : .venv*"
-
+            virtual_env=$(find -maxdepth 2  -type d -name ".venv*"  | fzf)  
+            print "Activated virtualenv: $virtual_env" 
+            source "$virtual_env"/bin/activate
         fi 
 
     else
-
-        #ENV_NAME=$(eval 'find -name .*$1')
          source "$1"/bin/activate; print "Activated virtualenv: $1" || print "Failed to activate virtualenv: $1"
 
     fi
