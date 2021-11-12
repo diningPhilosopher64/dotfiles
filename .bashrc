@@ -62,8 +62,9 @@ fi
 
 ########################################################################################################
 
-# env vars
+# EXPORTS env vars
 # export NODE_PATH="/usr/softwares/node-v14.16.0-linux-x64/lib/node_modules/"
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
 # Enable vim shortcuts in bash
 set -o vi
@@ -172,6 +173,11 @@ export PATH="/home/skondapa/.local/bin:$PATH"
 
 #reload/source bashrc
 alias 'sourcerc'='source ~/.bashrc'
+
+# copy/paste to system clipboard
+alias copy='xsel --clipboard --input'
+alias paste='xsel --clipboard --output'
+
 
 # get process id from port
 function getpid-port {
@@ -385,7 +391,12 @@ function ga() {
 }
 
 function gchb {
-    git checkout `glsbv | fzf --reverse | awk '{print $1}'`
+    if [ -z "$1" ]
+    then
+        git checkout `glsb | fzf` #| awk '{print $1}'`
+    else
+        git checkout "$1"
+    fi
 }
 
 # Add all changed files to Git.
