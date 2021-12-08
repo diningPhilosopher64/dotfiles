@@ -43,11 +43,20 @@ set mouse=a
 " Remaps 
 
 
+" Many ways to switch to normal mode
 inoremap jk <Esc>
 inoremap jj <Esc>
 inoremap kj <Esc>
 
+" Make Shift-Y behave like Shift-c or Shift-d
 nnoremap Y y$
+
+" When a mark is placed, '<letter> will mean go to the
+" marked line but not column and `<letter> will mean 
+" go to the exact line and column.
+" ` is too far away from home row. 
+" Now '<letter> === `<letter> 
+nnoremap ' `
 
 " Easy insertion of a trailing ; or , from insert mode
 imap ;; <Esc>A;<Esc>
