@@ -519,6 +519,11 @@ function clsch {
   conda config --show channels
 }
 
+# remove a channel
+function crmch {
+    conda config --remove channels "$1"
+}
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/usr/softwares/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
@@ -913,3 +918,4 @@ function install_in_versions {
         done
 }
 
+. "$HOME/.cargo/env"
