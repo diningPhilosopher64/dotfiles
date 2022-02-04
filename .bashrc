@@ -63,9 +63,12 @@ fi
 ########################################################################################################
 
 # EXPORTS env vars
-# export NODE_PATH="/usr/softwares/node-v14.16.0-linux-x64/lib/node_modules/"
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-
+export PATH="/usr/softwares/clang_12/bin:$PATH"
+export LD_LIBRARY_PATH="/usr/softwares/clang_12/bin/"
+export N_PREFIX="/usr/softwares/node_versions/"
+export PATH="$N_PREFIX/bin:$PATH"
+# export PATH="/usr/softwares/node-v14.16.0-linux-x64/bin:$PATH"
 # Enable vim shortcuts in bash
 set -o vi
 
@@ -555,6 +558,32 @@ function ni {
     fi
 }
 
+function list_node_versions {
+    n
+}
+function install_node_version {
+    if [ -z "$1" ]
+    then
+        print "Have to specify a node version"
+    else
+        sudo su
+        N_PREFIX="/usr/softwares/node_versions"
+        n install "$1"
+        exit
+        node -v
+    fi
+}
+
+function set_node_version {
+    if [ -z "$1" ]
+    then
+        print "Have to specify installed node version."
+    else
+        sudo rm /usr/softwares/node_versions/bin/*
+        sudo ln -s /usr/softwares/node_versions/n/versions/node/"$1"/bin/* /usr/softwares/node_versions/bin
+        print "Set node version to : $(node -v) "
+    fi
+}
 
 ########################## docker ########################## 
 alias 'dps'='docker ps'
