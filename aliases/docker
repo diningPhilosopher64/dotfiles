@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+alias 'dps'='docker ps'
+alias 'dpsa'='docker ps -a'
+alias 'd'='docker'
+alias 'dlsi'='d images'
+
+
+# "Private" generic function which is used in the below functions
+function __dex {
+    docker exec -it "$1" "$2"
+}
+
+# Attach a bash shell to a running docker container
+function dexb {
+    __dex "$1" /bin/bash
+}
+
+# Attach a sh shell to a running docker container
+function dexs {
+    __dex "$1" sh
+}
+
+# Making default shell as bash when attaching to a running docker container
+alias 'dex'='dexb'
+
+# Remove arbitrary number of  docker containers
+function drmc {
+    docker container rm "$@"
+}
+
+# Force remove arbitrary number of docker containers
+function drmfc {
+    docker container rm -f "$@"
+}
+
+# Remove arbitrary number of  docker images
+function drmi {
+    docker image rm "$@"
+}
+
+# Force remove arbitrary number of docker images
+function drmfi {
+    docker image rm -f "$@"
+}
+
+# When run interactively, you want to use a shell
+# docker run bash
+function drrmit {
+    docker run --rm -it "$1" bash
+}
+
+# docker run sh
+function drrmits {
+    docker run --rm -it "$1" sh
+}
+
+# When run in detached mode, you may want to pass an arg
+function drd {
+    docker run -d "$1" "$2"
+}
