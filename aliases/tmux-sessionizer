@@ -124,16 +124,26 @@ function tmux_sessionizer {
     if [[ $# -eq 1 ]]; then
         complete_path=$1
     else
-        complete_path=$(find ${valid_directories[*]} -mindepth 1 -maxdepth 2  -type d | fzf)  
+        complete_path=$(find ${valid_directories[*]} -mindepth 1 -maxdepth 2  -type d | fzf)
     fi
-                                                                                    
+
     folder_name=$(basename "$complete_path" | tr . _)                                    
-                                                                                    
+
+    # Set the --print-query flag to FZF_DEFAULT_OPTS env var
+    # This will print out the typed query in fzf even if it doesn't exist
+    # If we search for a non-existent folder, then $complete_path and $folder_name
+    # Will be the same. I can use this to create a folder in the current pwd with $folder_name
+    # and create a tmux session for it.
+    if [[ "$folder_name" == "$complete_path" ]]; then                                                  
+        print "Folder $folder_name doesn't exist. Creating one now"
+        mkdir "$PWD/$folder_name"
+    fi                                                                          
+
     if ! tmux has-session -t "$folder_name" 2> /dev/null; then                                  
         __tmks "$folder_name" "$complete_path"                                             
     fi                                                                              
-                                                                                    
-    tchs "$folder_name"   
+    
+   tchs "$folder_name"   
 }
 
 alias 'ts'='tmux_sessionizer'
