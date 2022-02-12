@@ -1,0 +1,122 @@
+let mapleader = " "
+
+"Custom settings
+syntax on                                                                       
+filetype on
+
+set termguicolors
+set hidden "will keep the current buffer open if navigated away without saving.
+set showcmd
+set noerrorbells                                                                
+set shiftwidth=4                                                                
+set incsearch                                                                   
+set colorcolumn=80                                                              
+set scrolloff=8                                                                 
+set number                                                                      
+set relativenumber                                                              
+set tabstop=4 softtabstop=4                                                     
+set expandtab                                                                   
+set smartindent
+set smarttab
+set autoindent
+set backspace=indent,eol,start
+set smartcase " When using / for search, will smartly search for case sensitive and insensitive
+set signcolumn=yes
+set splitbelow splitright
+set mouse=a
+set cursorline
+" set guicursor= " Common cursor for all modes
+set nohlsearch
+"set list
+"set listchars=tab:▸\ ,trail:·
+
+" #################################################################################
+
+
+" Remaps 
+
+" Reselect visual selection after indenting
+vnoremap < <gv
+vnoremap > >gv
+
+" Many ways to switch to normal mode
+inoremap jk <Esc>
+inoremap jj <Esc>
+inoremap kj <Esc>
+
+" Make Shift-Y behave like Shift-c or Shift-d
+nnoremap Y y$
+
+" When a mark is placed, '<letter> will mean go to the
+" marked line but not column and `<letter> will mean 
+" go to the exact line and column.
+" ` is too far away from home row. 
+" Now '<letter> === `<letter> 
+nnoremap ' `
+
+" Easy insertion of a trailing ; or , from insert mode
+imap ;; <Esc>A;<Esc>
+imap ,, <Esc>A,<Esc>
+
+" Keeping it centered when going over next item in search list
+nnoremap n nzzzv
+nnoremap N Nzzzv
+" Keeping it centered when joining below line to the current one
+nnoremap J mzJ`z
+
+
+" Some magic which will allow for selecting blocks of code and 
+" moving them while respecting indenting rules. Instead of ddp'ing 
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+inoremap <C-j> <esc>:m .+1<CR>==
+inoremap <C-k> <esc>:m .-2<CR>==
+nnoremap <leader>k :m .-2<CR>==
+nnoremap <leader>j :m .+1<CR>==
+
+" ############### Telescope remaps #####################
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+
+
+
+" #################################################################################
+" Plugins 
+
+call plug#begin()
+"Plug 'https://github.com/vim-airline/vim-airline'
+Plug 'nvim-lualine/lualine.nvim'
+" If you want to have icons in your statusline choose one of these
+Plug 'kyazdani42/nvim-web-devicons'
+
+Plug 'https://github.com/preservim/nerdtree'
+Plug 'gruvbox-community/gruvbox'
+Plug 'ryanoasis/vim-devicons'
+Plug 'nvim-telescope/telescope.nvim'
+" Required for telescope
+" Will need to install ripgrep, TreeSitter, plenary and fd additionally
+" Run :checkhealth telescope on how to install
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" Alternative to telescope:
+"Plug '/home/sourabh/appimages/fzf'
+call plug#end()
+
+colorscheme gruvbox
+
+" highlight CursorLine ctermbg=236 guibg=lightgrey 
+highlight CursorLine  term=NONE cterm=NONE ctermbg=236
+
+"Plugin specific
+let g:NERDTreeDirArrowExpandable="+"
+let g:NERDTreeDirArrowCollapsible="~"
+
+
+" Start of lua script in vimscript.
+lua << END
+require('lualine').setup()
+END
+" End of lua script in vimscript.

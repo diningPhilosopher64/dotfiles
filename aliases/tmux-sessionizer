@@ -50,7 +50,6 @@ function tls {
 function __select_session {
     selected_option=$(tls | fzf)
     arr=(${selected_option//:/ })
-    echo "$arr"
     session_name=${arr[0]}
     echo $session_name
 }
