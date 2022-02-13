@@ -562,12 +562,10 @@ function sfl {
 
 ################################ tmux ##################################
 
-source /home/"$USER"/temp/dotfiles/aliases/tmux-sessionizer
-
+source /home/"$USER"/temp/dotfiles/aliases/tmux
 
 
 ################################# Temp ##################################
-
 function runInteg {
 # $1 = MWI_BASE_URL
 # $2 = MWI_APP_PORT 
