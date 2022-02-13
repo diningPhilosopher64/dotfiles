@@ -11,6 +11,7 @@
 # To navigate to next  window  : prefix + n
 # To split a window : prefix + %
 
+alias tmux='tmux -u'
 
 # Server stuff
 function trmserver {
@@ -55,31 +56,31 @@ function __select_session {
 }
 
 
-function __tmks {
-    if [ -z "$1" ]
-    then
-        print "Error: tmux session must have a name"
-        return 
-    fi
-    
-    if [ -z "$2" ]
-    then
-        if tmux -u new-session -s "$1" /bin/bash > /dev/null 2>&1; then
-            print "Created new session on the server with name $1"
-        else
-            print "Already in a session. Creating a detached session with name $1"
-            tmux -u new-session -d -s "$1" /bin/bash 
-        fi
-    else
-        if tmux -u new-session -s "$1" -c "$2" /bin/bash > /dev/null 2>&1; then
-            print "Created session on a new server with name $1 and path $2"
-        else
-            print "Already in a session. Creating a detached session with name $1 and path $2"
-            tmux -u new-session -d -s "$1" -c "$2" /bin/bash 
-        fi
-
-    fi
-}
+# function __tmks {
+    # if [ -z "$1" ]
+    # then
+        # print "Error: tmux session must have a name"
+        # return 
+    # fi
+    # 
+    # if [ -z "$2" ]
+    # then
+        # if tmux -u new-session -s "$1" /bin/bash > /dev/null 2>&1; then
+            # print "Created new session on the server with name $1"
+        # else
+            # print "Already in a session. Creating a detached session with name $1"
+            # tmux -u new-session -d -s "$1" /bin/bash 
+        # fi
+    # else
+        # if tmux -u new-session -s "$1" -c "$2" /bin/bash > /dev/null 2>&1; then
+            # print "Created session on a new server with name $1 and path $2"
+        # else
+            # print "Already in a session. Creating a detached session with name $1 and path $2"
+            # tmux -u new-session -d -s "$1" -c "$2" /bin/bash 
+        # fi
+# 
+    # fi
+# }
 
 
 # Change/Switch to a session
@@ -95,7 +96,12 @@ function tchs {
     # session_name and window_name and pane_number.
     # Format is : <session_name>:<window_name>:<pane_number>
 
-    tmux switch-client -t $session_name 2> /dev/null
+    if [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; then
+      tmux switch-client -t $session_name 2> /dev/null
+    else
+        tmux attach -t $session_name
+    fi
+
     
 }
 
@@ -134,12 +140,14 @@ function tmux_sessionizer {
     # Will be the same. I can use this to create a folder in the current pwd with $folder_name
     # and create a tmux session for it.
     if [[ "$folder_name" == "$complete_path" ]]; then                                                  
-        print "Folder $folder_name doesn't exist. Creating one now"
+        print "Folder doesn't exist. Will create and launch tmux there"
         mkdir "$PWD/$folder_name"
+        complete_path="$PWD/$folder_name"
     fi                                                                          
-
+    
     if ! tmux has-session -t "$folder_name" 2> /dev/null; then                                  
-        __tmks "$folder_name" "$complete_path"                                             
+        #__tmks "$folder_name" "$complete_path"                                             
+        tmux new-session -s "$folder_name" -c "$complete_path" -d 
     fi                                                                              
     
    tchs "$folder_name"   

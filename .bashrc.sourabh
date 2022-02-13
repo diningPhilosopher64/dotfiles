@@ -5,7 +5,7 @@
 ########################################################################################################
 
 # EXPORTS env vars
-export FZF_DEFAULT_OPTS='--height 40% --preview-window=right  --layout=reverse --border --print-query'
+export FZF_DEFAULT_OPTS='--height 40% --preview-window=right  --layout=reverse --border'
 export PATH="/usr/softwares/clang_12/bin:$PATH"
 export LD_LIBRARY_PATH="/usr/softwares/clang_12/bin/"
 export N_PREFIX="/usr/softwares/node_versions/"
