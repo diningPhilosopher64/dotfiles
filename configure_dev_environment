@@ -1,0 +1,79 @@
+export BASH_RC_FILE="/home/$USER/.bashrc"
+export TMUX_CONF_FILE="/home/$USER/.tmux.conf"
+export NEOVIM_PATH="/home/$USER/.config/nvim"
+export DOTFILES_PATH="/home/$USER/dotfiles"
+export MY_BASH_RC_FILE_NAME=".bashrc.sourabh"
+export MY_TMUX_CONF_FILE_NAME=".tmux.conf.sourabh"
+
+function repeat {
+    num="${2:-100}"; printf -- "$1%.0s" $(seq 1 $num);
+}
+
+function print {
+    terminalCols=$(tput cols)                                                   
+    argLen=${#1}                                                                
+    offset=$(((terminalCols-argLen)/2))                                         
+
+    printf "\n"                                                                 
+    repeat '#' $((offset-1))                                                    
+    printf " $1 "                                                               
+    repeat '#' $((offset-1))                                                    
+    printf "\n" 
+}
+
+
+function configure_bashrc {
+    if [ -f "$BASH_RC_FILE" ]; then
+        print "Found file $BASH_RC_FILE"
+    else
+        print "No existing file found at $BASH_RC_FILE. Creating one..."
+        touch "$BASH_RC_FILE"
+    fi
+
+    if grep -q -F "$MY_BASH_RC_FILE_NAME" "$BASH_RC_FILE"; then 
+        print "Found $MY_BASH_RC_FILE_NAME reference in $BASH_RC_FILE. Doing nothing..."
+    else
+        echo -n "source-file $DOTFILES_PATH/$MY_BASH_RC_FILE_NAME" >> "$BASH_RC_FILE" 
+        print "Sourced $MY_BASH_RC_FILE_NAME in $BASH_RC_FILE"
+    fi
+}
+
+
+function configure_neovim {
+
+    if [ -d "$NEOVIM_PATH" ]; then
+       print "$NEOVIM_PATH already exists. Do you want to delete the existing folder ?" 
+       read -p "Continue (y/n)?" choice
+
+       if [ "$choice" = "y" ]; then
+          cp -r "$DOTFILES_PATH/nvim" "/home/$USER/.config/"
+          print "You need to run PackerSync/Install" 
+        else   
+          print "Not replacing neovim config"
+       fi
+
+    else
+       print "$NEOVIM_PATH doesnt exist. Copying nvim folder from $DOTFILES_PATH." 
+       cp -r "$DOTFILES_PATH/nvim" "/home/$USER/.config/" && print "You need to run PackerSync/Install"
+    fi
+}
+
+function configure_tmux {
+    if [ -f "$TMUX_CONF_FILE" ]; then
+        print "Found file $TMUX_CONF_FILE"
+    else
+        print "No existing file found at $TMUX_CONF_FILE. Creating one..."
+        touch "$TMUX_CONF_FILE"
+    fi
+
+    if grep -q -F "$MY_TMUX_CONF_FILE_NAME" "$TMUX_CONF_FILE"; then 
+        print "Found $MY_TMUX_CONF_FILE_NAME reference in $TMUX_CONF_FILE. Doing nothing..."
+    else
+        echo "source-file $DOTFILES_PATH/$MY_TMUX_CONF_FILE_NAME" >> "$TMUX_CONF_FILE" 
+        print "Sourced $MY_TMUX_CONF_FILE_NAME in $TMUX_CONF_FILE"
+    fi
+}
+
+configure_bashrc
+configure_tmux
+configure_neovim
