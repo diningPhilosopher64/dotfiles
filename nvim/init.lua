@@ -6,7 +6,7 @@ require "user.lualine"
 require "user.cmp"
 require "user.lsp"
 require "user.telescope"
-require "user.comment"
+-- require "user.comment"
 require "user.gitsigns"
 require "user.nvim-tree"
 require "user.bufferline"
@@ -14,4 +14,4 @@ require "user.toggleterm"
 require "user.autopairs"
 require "user.treesitter"
 
-
+require("Comment").setup()
