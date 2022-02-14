@@ -69,17 +69,17 @@ alias 'vim'='nvim'
 
 # Setup fzf
 # ---------
-if [[ ! "$PATH" == */home/sourabh/appimages/fzf/bin* ]]; then
-  export PATH="${PATH:+${PATH}:}/home/sourabh/appimages/fzf/bin"
+if [[ ! "$PATH" == */home/"$USER"/appimages/fzf/bin* ]]; then
+  export PATH="${PATH:+${PATH}:}/home/"$USER"/appimages/fzf/bin"
 fi
 
 # Auto-completion
 # ---------------
-[[ $- == *i* ]] && source "/home/sourabh/appimages/fzf/shell/completion.bash" 2> /dev/null
+[[ $- == *i* ]] && source "/home/"$USER"/appimages/fzf/shell/completion.bash" 2> /dev/null
 
 # Key bindings
 # ------------
-source "/home/sourabh/appimages/fzf/shell/key-bindings.bash"
+source "/home/"$USER"/appimages/fzf/shell/key-bindings.bash"
 
 
 ##########################Byobu##########################
