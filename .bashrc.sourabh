@@ -512,10 +512,10 @@ unset __conda_setup
 
 
 ########################## node ########################## 
-source /home/"$USER"/temp/dotfiles/aliases/node
+source /home/"$USER"/dotfiles/aliases/node
 
 ########################## docker ########################## 
-source /home/"$USER"/temp/dotfiles/aliases/docker
+source /home/"$USER"/dotfiles/aliases/docker
 
 
 ########################## Serverless Framework ########################## 
@@ -562,7 +562,7 @@ function sfl {
 
 ################################ tmux ##################################
 
-source /home/"$USER"/temp/dotfiles/aliases/tmux
+source /home/"$USER"/dotfiles/aliases/tmux
 
 
 ################################# Temp ##################################
