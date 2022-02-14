@@ -33,7 +33,7 @@ function configure_bashrc {
     if grep -q -F "$MY_BASH_RC_FILE_NAME" "$BASH_RC_FILE"; then 
         print "Found $MY_BASH_RC_FILE_NAME reference in $BASH_RC_FILE. Doing nothing..."
     else
-        echo -n "source-file $DOTFILES_PATH/$MY_BASH_RC_FILE_NAME" >> "$BASH_RC_FILE" 
+        echo  "source $DOTFILES_PATH/$MY_BASH_RC_FILE_NAME" >> "$BASH_RC_FILE" 
         print "Sourced $MY_BASH_RC_FILE_NAME in $BASH_RC_FILE"
     fi
 }
