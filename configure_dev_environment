@@ -1,9 +1,17 @@
+#!/usr/bin/env bash 
+
 export BASH_RC_FILE="/home/$USER/.bashrc"
 export TMUX_CONF_FILE="/home/$USER/.tmux.conf"
 export NEOVIM_PATH="/home/$USER/.config/nvim"
 export DOTFILES_PATH="/home/$USER/dotfiles"
 export MY_BASH_RC_FILE_NAME=".bashrc.sourabh"
 export MY_TMUX_CONF_FILE_NAME=".tmux.conf.sourabh"
+
+# TODO: Check if fzf is installed, if not, git clone fzf into ~/appimages folder 
+# TODO: Check if neovim is installed, get app image of it and put it in ~/appimages
+# TODO: Create ~/appimages and use curl(?) or wget to pull from github neovim release to pull nvim.appimage.
+#       Then soft link to /usr/bin
+# TODO: Check if Tmux is installed. If not install first.
 
 function repeat {
     num="${2:-100}"; printf -- "$1%.0s" $(seq 1 $num);

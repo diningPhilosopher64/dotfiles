@@ -11,6 +11,7 @@ require "user.gitsigns"
 require "user.nvim-tree"
 require "user.bufferline"
 require "user.toggleterm"
+require "user.autopairs"
+require "user.treesitter"
 
 
--- vim.cmd "colorscheme gruvbox"

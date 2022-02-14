@@ -12,6 +12,7 @@
 # To split a window : prefix + %
 
 alias tmux='tmux -u'
+export MY_SHELL="bash"
 
 # Server stuff
 function trmserver {
@@ -147,7 +148,7 @@ function tmux_sessionizer {
     
     if ! tmux has-session -t "$folder_name" 2> /dev/null; then                                  
         #__tmks "$folder_name" "$complete_path"                                             
-        tmux new-session -s "$folder_name" -c "$complete_path" -d 
+        tmux new-session -s "$folder_name" -c "$complete_path" -d "$MY_SHELL" 
     fi                                                                              
     
    tchs "$folder_name"   

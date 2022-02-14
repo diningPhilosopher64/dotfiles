@@ -45,8 +45,8 @@ return packer.startup(function(use)
   use "wbthomason/packer.nvim" -- Have packer manage itself
   
   -- Utility
-  use 'kyazdani42/nvim-tree.lua'
   use "windwp/nvim-autopairs" -- Autopairs, integrates with both cmp and treesitter 
+  use 'kyazdani42/nvim-tree.lua'
   use "numToStr/Comment.nvim" -- Easily comment stuff
   use "akinsho/toggleterm.nvim"
     -- git
@@ -64,14 +64,11 @@ return packer.startup(function(use)
   -- Lazy loading:
   -- Load on specific commands
   -- When either Dispatch, Make, Focus, Start etc are run as a command, this plugin will be loaded and do its thing.
-  -- use {'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
+  use {'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
   
    -- Plugins can have post-install/update hooks
   use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
 
-    -- Post-install/update hook with neovim command
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-  use 'JoosepAlviste/nvim-ts-context-commentstring'
 
 
    -- snippets
@@ -106,11 +103,13 @@ return packer.startup(function(use)
 
 
   
-  -- Treesitter
+-- Post-install/update hook with neovim command
+-- Treesitter
   use {
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate",
   }
+  use 'JoosepAlviste/nvim-ts-context-commentstring'
   use "p00f/nvim-ts-rainbow"
 
   -- Automatically set up your configuration after cloning packer.nvim
