@@ -47,13 +47,8 @@ return packer.startup(function(use)
   -- Utility
   use "windwp/nvim-autopairs" -- Autopairs, integrates with both cmp and treesitter 
   use 'kyazdani42/nvim-tree.lua'
-  -- use "numToStr/Comment.nvim" -- Easily comment stuff
-  use {
-    'numToStr/Comment.nvim',
-    config = function()
-        require('Comment').setup()
-    end
-  }
+  use "numToStr/Comment.nvim" -- Easily comment stuff
+  
   use "akinsho/toggleterm.nvim"
     -- git
   use "lewis6991/gitsigns.nvim"

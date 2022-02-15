@@ -16,7 +16,7 @@ local options = {
   filetype ="on",
   backup = false,                          -- creates a backup file
   clipboard = "unnamedplus",               -- allows neovim to access the system clipboard
-  -- cmdheight = 1,                           -- more space in the neovim command line for displaying messages
+ -- cmdheight = 1,                           -- more space in the neovim command line for displaying messages
   completeopt = { "menuone", "noselect" }, -- mostly just for cmp
   conceallevel = 0,                        -- so that `` is visible in markdown files
   fileencoding = "utf-8",                  -- the encoding written to a file
@@ -24,7 +24,6 @@ local options = {
   ignorecase = true,                       -- ignore case in search patterns
   mouse = "a",                             -- allow the mouse to be used in neovim
   pumheight = 10,                          -- pop up menu height
-  showmode = false,                        -- we don't need to see things like -- INSERT -- anymore
   showtabline = 2,                         -- always show tabs
   smartcase = true,                        -- smart case
   smartindent = true,                      -- make indenting smarter again
@@ -32,7 +31,7 @@ local options = {
   splitright = true,                       -- force all vertical splits to go to the right of current window
   swapfile = false,                        -- creates a swapfile
   termguicolors = true,                    -- set term gui colors (most terminals support this)
-  timeoutlen = 100,                        -- time to wait for a mapped sequence to complete (in milliseconds)
+  timeoutlen = 200,                        -- time to wait for a mapped sequence to complete (in milliseconds)
   undofile = true,                         -- enable persistent undo
   updatetime = 300,                        -- faster completion (4000ms default)
   writebackup = false,                     -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
@@ -59,4 +58,3 @@ vim.cmd "set nohlsearch"
 vim.cmd "set noerrorbells"
 vim.cmd "highlight CursorLine  term=NONE cterm=NONE ctermbg=236"
 vim.cmd [[set iskeyword+=-]] -- will treat '-' as part of the word. So you can do 'dw' and it will delete the whole word.
-vim.cmd [[set formatoptions-=cro]] -- TODO: this doesn't seem to work
