@@ -21,15 +21,26 @@ bind l selectp -R # switch to panel Right
 # split window into panes 
 # Create a vertical split and cd into the same directory
 bind v split-window -h -c "#{pane_current_path}" 
+
 # Create a horizontal split and cd into the same directory
-bind h split-window -c "#{pane_current_path}"
+bind x split-window -c "#{pane_current_path}"
 
 # Create new window and cd into the same directory
 bind c new-window -c "#{pane_current_path}"
 
+# Switch windows 
+# Last active window. l is being used for switching between panes.
+bind C-l last-window
 
-# Create a horizontal split
-bind x split-window -v 
+# Next window
+bind n last-window
+
+#Previous window
+bind p last-window
+
+#Zoom on a pane 
+bind f resize-pane -Z
+
 
 # Recommended by nvim 
 set-option -sg escape-time 10
