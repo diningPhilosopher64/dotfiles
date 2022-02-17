@@ -13,4 +13,3 @@ require "user.bufferline"
 require "user.toggleterm"
 require "user.autopairs"
 require "user.treesitter"
-
