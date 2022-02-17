@@ -33,12 +33,12 @@ bind c new-window -c "#{pane_current_path}"
 bind C-l last-window
 
 # Next window
-bind n last-window
+bind Right last-window
 
-#Previous window
-bind p last-window
+# Previous window
+bind Left previous-window
 
-#Zoom on a pane 
+# Zoom on a pane 
 bind f resize-pane -Z
 
 
