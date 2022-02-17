@@ -102,20 +102,29 @@ function tchs {
     else
         tmux attach -t $session_name
     fi
-
-    
 }
+
+function tmvs {
+    if [ -z "$1" ]
+    then
+        print "Need to provide a new name for the session"
+    fi
+    #    Replace . with _ and '/' with ' '
+    new_session_name=`echo "$1" | tr ./ _\ `
+    tmux rename-session "$new_session_name"
+}
+
 
 # tmux-sessionizer
 function tmux_sessionizer {
 
-	current_working_dir=$(pwd)
+	  current_working_dir=$(pwd)
 
-    common_directories=(~ ~/Downloads ~/Documents)                                  
+    common_directories=(~/Downloads ~/Documents)                                  
 
     personal_directories=(~/work ~/work/personal)                                   
     
-    office_directories=(~ /sandbox/skondapa/Projects/fte/jupyter_matlab_proxy /sandbox/skondapa/Projects/fte /work)
+    office_directories=(/sandbox/skondapa/Projects/fte/)
     
     all_directories+=( "${current_working_dir[@]}" "${personal_directories[@]}"  "${office_directories[@]}" "${common_directories[@]}" )
 
