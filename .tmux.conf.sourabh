@@ -1,8 +1,11 @@
 # Key binding to source this file
-bind r source-file ~/.tmux.conf
+bind r source-file ~/.tmux.conf \; display-message "Config reloaded"
 
 # Set starting index to 1 for windows 
 set -g base-index 1
+
+# Set history limit for window 
+set -g history-limit 10000
 
 # Change prefix to Ctrl + Space
 unbind C-b

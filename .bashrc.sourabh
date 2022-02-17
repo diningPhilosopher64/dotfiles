@@ -151,6 +151,7 @@ alias 'sourcerc'='source ~/.bashrc'
 alias copy='xsel --clipboard --input'
 alias paste='xsel --clipboard --output'
 
+alias ":q"="exit"
 
 # get process id from port
 function getpid-port {
