@@ -62,7 +62,7 @@ export starship=~/.config/starship.toml
 
 ##########################neovim##########################
 
-alias 'neovim'='TERM=xterm-256color nvim'
+alias 'neovim'='nvim'
 alias 'vim'='neovim'
 alias 'v'='neovim'
 alias 'nvim'='neovim'
