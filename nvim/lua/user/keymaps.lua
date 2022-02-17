@@ -3,32 +3,32 @@ local opts = { noremap = true, silent = true }
 local term_opts = { silent = true }
 
 -- Shorten function name
-    local keymap = vim.api.nvim_set_keymap
+local keymap = vim.api.nvim_set_keymap
 
-    --Remap space as leader key
-    keymap("", "<Space>", "<Nop>", opts)
-    vim.g.mapleader = " "
-    vim.g.maplocalleader = " "
+--Remap space as leader key
+keymap("", "<Space>", "<Nop>", opts)
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
-    -- Modes
-    --   normal_mode = "n",
-    --   insert_mode = "i",
-    --   visual_mode = "v",
-    --   visual_block_mode = "x",
-    --   term_mode = "t",
-    --   command_mode = "c",
+-- Modes
+--   normal_mode = "n",
+--   insert_mode = "i",
+--   visual_mode = "v",
+--   visual_block_mode = "x",
+--   term_mode = "t",
+--   command_mode = "c",
 
-    -- Normal --
-    -- Better navigation between splits
-    keymap("n", "<C-h>", "<C-w>h", opts)
-    keymap("n", "<C-j>", "<C-w>j", opts)
-    keymap("n", "<C-k>", "<C-w>k", opts)
-    keymap("n", "<C-l>", "<C-w>l", opts)
-    keymap("n", "<TAB>", ":BufferLineMoveNext<CR>", opts)
-    keymap("n", "<S-TAB>", ":BufferLineMovePrev<CR>", opts)
+-- Normal --
+-- Better navigation between splits
+keymap("n", "<C-h>", "<C-w>h", opts)
+keymap("n", "<C-j>", "<C-w>j", opts)
+keymap("n", "<C-k>", "<C-w>k", opts)
+keymap("n", "<C-l>", "<C-w>l", opts)
+keymap("n", "<TAB>", ":BufferLineMoveNext<CR>", opts)
+keymap("n", "<S-TAB>", ":BufferLineMovePrev<CR>", opts)
 
-
-    keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
+-- Nvim-tree
+keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
 
 -- Resize with arrows
 keymap("n", "<C-Up>", ":resize +2<CR>", opts)
@@ -53,12 +53,14 @@ keymap("n", "N", "Nzzzv", opts)
 keymap("n", "J", "mzJ`z", opts)
 
 
-
-
-
 -- Navigate buffers
 keymap("n", "<S-l>", ":bnext<CR>", opts)
 keymap("n", "<S-h>", ":bprevious<CR>", opts)
+
+-- Save current buffer 
+keymap("n", "<C-s>", ":ws<CR>", opts)
+-- Close current buffer 
+keymap("n", "<C-w>", ":q<CR>", opts)
 
 -- Insert --
 -- Switch to Normal mode quickly from home row
@@ -75,11 +77,21 @@ keymap("i", "jj", "<ESC>", opts)
 keymap("i", ";;", "<ESC>A;<ESC>", opts)
 keymap("i", ",,", "<ESC>A,<ESC>", opts)
 
+-- Save current buffer 
+keymap("i", "<C-s>", "<ESC>:w<CR>", opts)
+-- Close current buffer 
+keymap("i", "<C-w>", "<ESC>:q<CR>", opts)
 
 -- Visual --
 -- Stay in indent mode
 keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
+
+-- Switch to Normal mode quickly from home row
+keymap("v", "jk", "<ESC>", opts)
+keymap("v", "kj", "<ESC>", opts)
+keymap("v", "kk", "<ESC>", opts)
+keymap("v", "jj", "<ESC>", opts)
 
 -- Move text up and down
 keymap("v", "<leader>j", ":m .+1<CR>==", opts)

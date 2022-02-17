@@ -1,0 +1,95 @@
+add_newline = true
+#format = """
+#[┌───────────────────>](bold green)
+#[│](bold green)$directory$rust$package
+#[└─>](bold green) """
+
+
+[line_break]
+disabled = false
+# Replace the "❯" symbol in the prompt with "➜"
+[character]      
+format = "$symbol "                      # The name of the module we are configuring is "character"
+success_symbol = "[❯❯❯](bold bright-green)"  # The "success_symbol" segment is being set to "➜" with the color "bold green"
+error_symbol = "[Error in prev cmd ✗](bold bright-red)"
+
+
+[aws]
+disabled = true
+
+
+[battery]
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+discharging_symbol = "💀 "
+[[battery.display]]
+threshold = 10
+style = "bold red"
+
+
+[cmd_duration]
+min_time = 1000
+format = "Above cmd took :  [$duration](bold yellow)"
+
+[directory]
+truncation_length = 2 
+truncation_symbol = "……/"
+truncate_to_repo=false
+style = "bold yellow"
+format = "\\[[$path]($style)\\] "
+
+[docker_context]
+format = "via [🐋 $context](blue bold)"
+
+[git_branch]
+symbol = ""
+truncation_length = 14 
+truncation_symbol = "……"
+style= "bold fg:black bg:white"
+format = "On $symbol [$branch]($style) "
+
+[git_commit]
+commit_hash_length = 4
+tag_symbol = "🔖 "
+
+
+
+[git_status]
+disabled = true
+behind = "😰"
+diverged = "😵"
+untracked = "🤷‍"
+stashed = "📦"
+staged = '[++\($count\)](green)'
+renamed = "👅"
+
+[username]
+style_user = "white bold"
+style_root = "red bold"
+format = "[$user]($style)@"
+disabled = false
+show_always = true
+
+[hostname]
+ssh_only = false
+format =  "[$hostname](bold white) "
+trim_at = ".companyname.com"
+disabled = false
+
+[nodejs]
+symbol = ""
+version_format = '$major.x'
+format = "via [$symbol $version](bold green) "
+
+[python]
+symbol = "🐍"
+version_format = "$major.$minor"
+#format = "[\\($virtualenv\\)](bright-yellow) $symbol [$version](bold bright-yellow)"
+format = "[($symbol( $virtualenv) ➜ $version)](bold bright-yellow)" #[($version)](bold bright-yellow)"
+
+
+
+[conda]
+format = " [$symbol$environment](bright-green)"
+ignore_base=false
+
