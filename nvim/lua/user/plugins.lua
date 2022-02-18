@@ -48,7 +48,10 @@ return packer.startup(function(use)
   use "windwp/nvim-autopairs" -- Autopairs, integrates with both cmp and treesitter 
   use 'kyazdani42/nvim-tree.lua'
   use "numToStr/Comment.nvim" -- Easily comment stuff
-  
+
+  -- save neovim state. Will be used by tmux-resurrect
+  use 'tpope/vim-obsession' 
+
   use "akinsho/toggleterm.nvim"
     -- git
   use "lewis6991/gitsigns.nvim"
