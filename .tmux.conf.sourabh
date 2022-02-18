@@ -69,7 +69,8 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 
 # To save neovim state
 set -g @resurrect-strategy-nvim 'session'
-#set -g @plugin 'tmux-plugins/tmux-sensible'
 
+set -g @resurrect-capture-pane-contents 'on'
+set -g @resurrect-processes ':all:'
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.tmux/plugins/tpm/tpm'

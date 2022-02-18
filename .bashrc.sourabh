@@ -10,6 +10,7 @@ export PATH="/usr/softwares/clang_12/bin:$PATH"
 export LD_LIBRARY_PATH="/usr/softwares/clang_12/bin/"
 export N_PREFIX="/usr/softwares/node_versions/"
 export PATH="$N_PREFIX/bin:$PATH"
+export GOPATH="$HOME/go"
 # export PATH="/usr/softwares/node-v14.16.0-linux-x64/bin:$PATH"
 # Enable vim shortcuts in bash
 set -o vi
