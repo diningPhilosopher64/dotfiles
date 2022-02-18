@@ -85,10 +85,12 @@ function __tchs {
 function tmvs {
     if [ -z "$1" ]
     then
-        print "Need to provide a new name for the session"
+        new_session_name=`basename $PWD`
+    else
+        new_session_name=$1
     fi
     #    Replace . with _ and '/' with ' '
-    new_session_name=`echo "$1" | tr ./ _\ `
+    new_session_name=`echo "$new_session_name" | tr ./ _\ `
     tmux rename-session "$new_session_name"
 }
 
