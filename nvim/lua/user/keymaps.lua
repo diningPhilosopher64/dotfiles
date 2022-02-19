@@ -60,7 +60,7 @@ keymap("n", "<S-h>", ":bprevious<CR>", opts)
 -- Save current buffer 
 keymap("n", "<C-s>", ":ws<CR>", opts)
 -- Close current buffer 
-keymap("n", "<C-w>", ":q<CR>", opts)
+keymap("n", "<C-w>", ":Bd<CR>", opts)
 
 -- Insert --
 -- Switch to Normal mode quickly from home row
