@@ -24,6 +24,7 @@ set -o vi
 . "$HOME/.cargo/env"
 
 # Adding custom paths to system path
+export PATH="/usr/local/lib:$PATH"  # npm global install location.
 
 # Adding anaconda executables to path 
 

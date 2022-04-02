@@ -28,7 +28,7 @@ keymap("n", "<TAB>", ":BufferLineMoveNext<CR>", opts)
 keymap("n", "<S-TAB>", ":BufferLineMovePrev<CR>", opts)
 
 -- Nvim-tree
-keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
+keymap("n", "<leader>t", ":NvimTreeToggle<cr>", opts)
 
 -- Resize with arrows
 keymap("n", "<C-Up>", ":resize +2<CR>", opts)

@@ -42,6 +42,11 @@ lsp_installer.on_server_ready(function(server)
 	 	opts = vim.tbl_deep_extend("force", golang_opts, opts)
 	 end
 
+	 if server.name == "tsserver" then
+	 	local tsserver_opts = require("user.lsp.settings.tsserver")
+	 	opts = vim.tbl_deep_extend("force", tsserver_opts, opts)
+	 end
+
 	-- This setup() function is exactly the same as lspconfig's setup function.
 	server:setup(opts)
 end)

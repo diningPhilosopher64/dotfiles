@@ -37,9 +37,9 @@ comment.setup {
     ---@type table
     toggler = {
         ---Line-comment toggle keymap
-        line = 'gcc',
+        line = 'ec',
         ---Block-comment toggle keymap
-        block = 'gbc',
+        block = 'eb',
     },
 
     ---LHS of operator-pending mappings in NORMAL + VISUAL mode
