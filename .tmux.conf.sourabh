@@ -58,6 +58,12 @@ set-window-option -g mode-keys vi
 bind-key -T copy-mode-vi 'v' send-keys -X begin-selection
 bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel 'xclip -sel clip -i'
 
+# Binding for session switch with fzf-tmux plugin
+bind-key "C-b" new-window -n "switching-window" " /bin/bash -c '~/.tmux/plugins/tmux-fzf/scripts/session.sh attach'"
+
+# Config for tmux_fzf plugin 
+TMUX_FZF_OPTIONS="-d 100%"
+TMUX_FZF_PREVIEW=0
 
 # Tmux plugins
 # List of plugins
@@ -67,10 +73,14 @@ set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 
+# Enable tmux sessio switching integrated with fzf
+set -g @plugin 'sainnhe/tmux-fzf'
+
 # To save neovim state
 set -g @resurrect-strategy-nvim 'session'
 
 set -g @resurrect-capture-pane-contents 'on'
 set -g @resurrect-processes ':all:'
+
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.tmux/plugins/tpm/tpm'

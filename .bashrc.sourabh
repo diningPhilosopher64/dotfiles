@@ -26,6 +26,9 @@ set -o vi
 # Adding custom paths to system path
 export PATH="/usr/local/lib:$PATH"  # npm global install location.
 
+# Go path
+export PATH=$PATH:/usr/local/go/bin 
+
 # Adding anaconda executables to path 
 
 if [ -d /usr/softwares/miniconda3/bin ]; then
