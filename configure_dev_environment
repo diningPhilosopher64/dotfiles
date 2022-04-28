@@ -3,6 +3,8 @@
 export BASH_RC_FILE="/home/$USER/.bashrc"
 export TMUX_CONF_FILE="/home/$USER/.tmux.conf"
 export NEOVIM_PATH="/home/$USER/.config/nvim"
+export LUNARVIM_PATH="/home/$USER/.config/lvim"
+export LUNARVIM_CONFIG_FILE_PATH="/home/$USER/.config/lvim/config.lua"
 export DOTFILES_PATH="/home/$USER/dotfiles"
 export MY_BASH_RC_FILE_NAME=".bashrc.sourabh"
 export MY_TMUX_CONF_FILE_NAME=".tmux.conf.sourabh"
@@ -44,6 +46,30 @@ function configure_bashrc {
         echo  "source $DOTFILES_PATH/$MY_BASH_RC_FILE_NAME" >> "$BASH_RC_FILE" 
         print "Sourced $MY_BASH_RC_FILE_NAME in $BASH_RC_FILE"
     fi
+}
+
+
+function configure_editor {
+  print "Configure either Neovim or Lunarvim. Press 1 for Neovim or 2 for lunarvim"
+  read -p "Continue (1/2)?" choice
+
+  if [ "$choice" = "1" ]; then
+    configure_neovim 
+  else   
+    configure_lunarvim
+  fi
+}
+
+
+function configure_lunarvim {
+  init_file="init.lua"
+  if grep -q -F "$init_file" "$LUNARVIM_CONFIG_FILE_PATH"; then 
+      print "Found $init_file reference in $LUNARVIM_CONFIG_FILE_PATH. Doing nothing..."
+  else
+      content="local user = os.getenv("USER")\nlocal init_path = string.format("/home/%s/dotfiles/lvim/init.lua", user)\ndofile(init_path)" 
+      echo $'$content' >> "$LUNARVIM_CONFIG_FILE_PATH" 
+      print "Sourced content in $LUNARVIM_CONFIG_FILE_PATH"
+  fi
 }
 
 
@@ -89,5 +115,4 @@ function configure_tmux {
 }
 
 configure_bashrc
-configure_tmux
-configure_neovim
+configure_editor

@@ -12,7 +12,7 @@
 # To split a window : prefix + %
 
 alias tmux='tmux -u'
-export MY_SHELL="bash"
+export MY_SHELL="/bin/bash"
 
 # Server stuff
 function trmserver {
@@ -161,9 +161,9 @@ function tmkw {
     cwd=$(pwd)
     if [ -z "$2" ]
     then
-       tmux -u new-window -n "$1" -c cd $cwd  bash
+       tmux -u new-window -n "$1" -c `cd $cwd;  $MY_SHELL`
     else
-       tmux -u new-window -n "$1"  -c "$2" bash
+       tmux -u new-window -n "$1"  -c `cd "$2"; $MY_SHELL`
     fi
 }
 
