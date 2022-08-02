@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+
+
+#git aliases
+alias 'gs'='git status'
+alias 'glo'='git log --oneline'
+alias 'gl'='git log'
+alias 'gc'='git commit -m'
+alias 'glsb'='git branch'
+alias 'glsba'='git branch -a'
+alias 'glsbv'='git branch -v'
+alias 'gbav'='git branch -av'
+alias 'glss'='git stash list'
+alias 'gsp'='git stash push -m'
+alias 'glsremote'='git remote -v'
+
+
+
+function gaddremote {
+        git remote add "$1" "$2"
+}
+
+function grenameremote {
+    git remote rename "$1" "$2"
+}
+
+# Add files provided as arguments to Git.
+function ga() {
+    git add "$*";
+}
+
+function gchb {
+    if [ -z "$1" ]
+    then
+        git checkout `glsb | fzf` #| awk '{print $1}'`
+    else
+        git checkout "$1"
+    fi
+}
+
+# Add all changed files to Git.
+function gaa() {
+    git add --all;
+}
+
+# Add all tracked files. Ignores untracked files.
+function gaat() {
+    git add -u;
+}
+
+# Fetch repo and fetch merge request
+function gfmr {
+    default_repo="https://insidelabs-git.mathworks.com/cit/mathworks/jupyter-matlab-proxy.git "
+    print "Cloning default repo: jupyter-matlab-proxy from insidelabs"
+    git clone $default_repo . || echo -e "Failed to clone repo" 
+    print "Fething merge request !$1 with branch name: $2"
+    git fetch origin merge-requests/"$1"/head:"$2" || print "Failed to fetch branch $2 of merge-request $1"
+}
+
+# Fetch repo and fetch merge request and install packages
+function gfmrip {
+    gfmr "$1" "$2"
+    mkvenv
+    avenv
+    print "Installing dependencies"
+    pip install -e .[DEV]
+    print "Checking out to branch $2"
+    git checkout "$2"
+}
+
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+  __git_complete g __git_main
+  __git_complete gc _git_checkout
+  #__git_complete gm __git_merge
+  __git_complete gp _git_pull
+
+fi
+

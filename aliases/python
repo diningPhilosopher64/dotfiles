@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+
+alias 'pirm'='pip uninstall -y'
+alias 'py'='python'
+alias 'sdist'='rm -rf dist/ ; py setup.py sdist ; pip install dist/*'
+
+# Pip install 
+function pi {
+    if [ -z "$1" ]
+    then 
+        pip install .
+    else 
+        pip install "$1"
+    fi
+}
+
+# Create new venv using python3
+# If no name is passed will default to .venv
+function mkvenv {
+    if [ -z "$1" ]
+    then
+        print "Creating virtualenv: .venv"
+        python3 -m venv .venv
+        avenv
+    else
+        print "Creating virtualenv: $1"
+        python3 -m venv "$1"
+        avenv "$1"
+    fi
+
+    print "Upgrading pip"
+    pip install pip --upgrade
+
+    print "Installing wheel package"
+    pip install wheel
+    print "Activated virtualenv"
+}
+
+alias 'mkenv'='mkvenv'
+
+# Remove a virtual env.
+# If no name is passed will default to .venv
+function rmvenv {
+    if [ -z "$1" ]
+    then
+        print "Removing virtualenv: .venv"
+        python3 -m venv .venv
+        rm -rf .venv
+    else
+        print "Removing virtualenv: $1"
+        rm -rf "$1"
+    fi
+}
+
+alias 'rmenv'='rmvenv'
+
+# Activate virtual env
+# If no name is passed will default to .venv
+function avenv {
+    # If no paramerter is passed try to activate .venv first. If .venv doesnt exist try with the next closest one. If both .venv37 and .venv38 exist. It will pick .venv37
+    # If parameter is passed, try to activate that one
+    if [ -z "$1" ]
+    then
+
+        if [ -d ".venv" ] 
+        then
+            source .venv/bin/activate 
+            print "Activated virtualenv: .venv" 
+
+        else   
+            virtual_env=$(find -maxdepth 2  -type d -name ".venv*"  | fzf)  
+            print "Activated virtualenv: $virtual_env" 
+            source "$virtual_env"/bin/activate
+        fi 
+
+    else
+         source "$1"/bin/activate; print "Activated virtualenv: $1" || print "Failed to activate virtualenv: $1"
+
+    fi
+}
+
+alias 'aenv'='avenv'
+
+# Deactivate virtual env
+
+function dvenv {
+
+    if [ -z "$1" ]
+    then
+        deactivate || print "Failed to deactivate virtualenv: .venv"
+        print "Deactivated virtualenv"
+    else
+        deactivate "$1" || print "Failed to deactivate virtualenv: $1"
+        print "Deactivated virtualenv" 
+    fi
+}
+alias 'denv'='dvenv'

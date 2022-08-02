@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+
+#serverless tab complete                                                        
+# tabtab source for packages                                                    
+# uninstall by removing these lines                                             
+[ -f ~/.config/tabtab/__tabtab.bash ] && . ~/.config/tabtab/__tabtab.bash || true
+
+#deploy project
+alias 'sd'='sls deploy -v'
+
+#deploy function
+function sdf {
+    sls deploy function -f "$1" -v
+}
+
+#invoke function with no logs
+alias 'sif'='sls invoke -f'
+
+#invoke function with logs enabled
+function sifl {
+    sls invoke -f "$1" -l
+}
+
+#Deploy and Invoke function with no logs
+function sdif {
+    sdf "$1" && sls invoke -f "$1"
+}
+
+#Deploy and Invoke function with logs
+function sdifl {
+    sdf "$1" && sls invoke -f "$1" -l
+}
+
+#Stream logs to console:
+# This is a blocking command
+function sfl {
+    print "Generating logs for $1"
+    sls logs -f "$1" -t
+}    
+

@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+
+
+
+#  MAMBA:Currently, only install, create, list, search, run, info and clean are supported through mamba.
+
+
+#create new venv
+function cmkvenv {
+   mkdir -p /usr/softwares/miniconda3/envs/"$1"
+#  mamba create -n "$1" --prefix=/usr/softwares/miniconda3/envs/"$1" python="$2" -y
+  conda create  --prefix=/usr/softwares/miniconda3/envs/"$1" python="$2" -y
+}
+alias 'cmkenv'='cmkvenv'
+
+# remove arbitrary number of conda virtual envs
+function crmenv {
+  mamba env remove -n "$@"
+}
+
+alias 'crmvenv'='crmenv'
+
+#list envs
+alias 'clsenv'='mamba env list'
+alias 'clsvenv'='mamba env list'
+
+# list packages in an env
+function clspkg {
+
+    if [ -z "$1" ]
+    then
+        # Will list packages in base env
+        conda list
+    else
+        # Will list packages in a specific env
+        conda list -n "$1"
+    fi
+}
+
+#activate venv.
+#Can't use mamba for activation and deactivation of env
+function caenv {
+  conda activate "$1"
+}
+
+#deactivate venv
+alias "cdvenv"="conda deactivate"
+alias "cdenv"="cdvenv"
+
+#add channels in conda
+function caddc {
+    if [ -z "$1" ]
+    then
+        echo "Provide a channel name to add!"
+        #exit 1;
+    else
+        mamba config --add channels "$1"
+    fi
+}
+
+#Conda install a package
+function cip {
+    if [ -z "$2" ]
+    then
+        /usr/softwares/miniconda3/condabin/mamba install -y "$1"
+    else
+         /usr/softwares/miniconda3/condabin/mamba install -c "$2" "$1"
+    fi
+}
+
+#Conda remove a package
+alias 'crmp'='mamba uninstall -y'
+
+#list channels in conda
+function clsch {
+  conda config --show channels
+}
+
+# remove a channel
+function crmch {
+    conda config --remove channels "$1"
+}
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/usr/softwares/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/usr/softwares/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/usr/softwares/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/usr/softwares/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
