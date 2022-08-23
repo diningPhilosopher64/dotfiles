@@ -143,6 +143,11 @@ extract () {
   fi
 }
 
+
+# Shutdown and restart
+alias shutdown='shutdown -h now'
+alias restart='shutdown -r now'
+
 # bash history specific config
 # HISTCONTROL=ignorespace:ignoredups
 HISTCONTROL=ignoreboth:erasedups
