@@ -1,4 +1,4 @@
-########################################################################################################
+#######################################################################################################
 
 #                                               My Stuff
 
@@ -65,11 +65,11 @@ shopt -s cdable_vars
 export projects=/sandbox/skondapa/Projects/fte                                  
 export starship=~/.config/starship.toml   
 
-##########################neovim##########################
+##########################neovim / lvim##########################
 
+alias 'vim'='lvim'
+alias 'v'='lvim'
 alias 'neovim'='nvim'
-alias 'vim'='neovim'
-alias 'v'='neovim'
 alias 'nvim'='neovim'
 
 ##########################fzf##########################

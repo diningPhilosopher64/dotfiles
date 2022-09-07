@@ -110,7 +110,6 @@ function configure_tmux {
         echo "source-file $DOTFILES_PATH/$MY_TMUX_CONF_FILE_NAME" >> "$TMUX_CONF_FILE" 
         echo "source-file $HOME/dotfiles/.tmux.theme.gruvbox" >> "$TMUX_CONF_FILE"  
         print "Sourced $MY_TMUX_CONF_FILE_NAME and theme in $TMUX_CONF_FILE"
-        
     fi
 }
 

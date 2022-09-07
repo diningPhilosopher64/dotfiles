@@ -6,4 +6,6 @@ lvim.plugins = {
     },
     { "fatih/vim-go", run = ':GoUpdateBinaries' },
     { "p00f/nvim-ts-rainbow" },
+    { "ggandor/lightspeed.nvim" },
+    { "tpope/vim-surround" },
 }
