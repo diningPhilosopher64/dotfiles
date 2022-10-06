@@ -8,11 +8,10 @@ export LUNARVIM_CONFIG_FILE_PATH="/home/$USER/.config/lvim/config.lua"
 export DOTFILES_PATH="/home/$USER/dotfiles"
 export MY_BASH_RC_FILE_NAME=".bashrc.sourabh"
 export MY_TMUX_CONF_FILE_NAME=".tmux.conf.sourabh"
+export NEOVIM_EXECUTABLE_PATH=`which nvim`
+
 
 # TODO: Check if fzf is installed, if not, git clone fzf into ~/appimages folder 
-# TODO: Check if neovim is installed, get app image of it and put it in ~/appimages
-# TODO: Create ~/appimages and use curl(?) or wget to pull from github neovim release to pull nvim.appimage.
-#       Then soft link to /usr/bin
 # TODO: Check if Tmux is installed. If not install first.
 
 function repeat {
@@ -49,7 +48,60 @@ function configure_bashrc {
 }
 
 
+function setup_softwares {
+    if [ ! -d "$SOFTWARES_PATH" ]; then
+        print "$SOFTWARES_PATH doesn't exist. Creating it..." 
+        sudo mkdir "$SOFTWARES_PATH"
+    fi
+
+    setup_fzf
+    setup_node
+    configure_editor
+
+}
+
+function setup_node {
+     if [ ! -z `which node` ]; then
+       print "Found Node.js executable on PATH. Skipping download..."
+     else
+       print "Downloading nvm..."
+       wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+       print "Installing latest node version"
+       nvm install node
+     fi
+}
+
+function setup_fzf {
+  print "Checking if fzf is installed"
+  
+    if [ ! -z `find $SOFTWARES_PATH -name fzf` ]; then
+      print "Found fzf executable at $SOFTWARES_PATH"
+    else 
+      print "Downloading fzf v0.34.0..."
+      wget -O "fzf.tar.gz" "https://github.com/junegunn/fzf/releases/download/0.34.0/fzf-0.34.0-linux_amd64.tar.gz"      
+      print "Extracting..."
+      tar -xvf fzf.tar.gz 
+      print "Moved fzf to $SOFTWARES_PATH"
+      sudo mv fzf $SOFTWARES_PATH
+    fi
+}
+
+
 function configure_editor {
+    print "Configuring Editor..."
+    print "Checking if neovim exists ?"
+    if [ ! -z `find $SOFTWARES_PATH -name nvim.*` ]; then
+        print "Found neovim executable at $SOFTWARES_PATH. Skipping download..."
+    else
+        print "neovim executable not found in path. Fetching the latest stable version of neovim"
+        wget "https://github.com/neovim/neovim/releases/download/stable/nvim.appimage"
+        chmod u+x nvim.appimage
+        print "Moving nvim.appimage to $SOFTWARES_PATH"
+        sudo mv ./nvim.appimage $SOFTWARES_PATH
+        # sudo ln -s $SOFTWARES_PATH/nvim.appimage /usr/bin/nvim
+    fi
+
   print "Configure either Neovim or Lunarvim. Press 1 for Neovim or 2 for lunarvim"
   read -p "Continue (1/2)?" choice
 
@@ -62,6 +114,16 @@ function configure_editor {
 
 
 function configure_lunarvim {
+    print "Checking if lunarvim is installed..."
+     if [ ! -z `which lvim` ]; then
+         print "Found lvim on PATH. Skipping installation"
+     else
+        bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh) -y --no-install-dependencies
+        print "Successfully installed lunarvim with no optional dependencies"
+     fi
+
+  print "Configuring lunarvim..."
+
   init_file="init.lua"
   if grep -q -F "$init_file" "$LUNARVIM_CONFIG_FILE_PATH"; then 
       print "Found $init_file reference in $LUNARVIM_CONFIG_FILE_PATH. Doing nothing..."
@@ -113,5 +175,10 @@ function configure_tmux {
     fi
 }
 
+# Modify ~/.bashrc
 configure_bashrc
-configure_editor
+
+# Source it to load new changes
+source ~/.bashrc
+
+setup_softwares

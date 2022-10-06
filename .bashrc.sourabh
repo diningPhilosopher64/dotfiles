@@ -11,6 +11,8 @@ export LD_LIBRARY_PATH="/usr/softwares/clang_12/bin/"
 export N_PREFIX="/usr/softwares/node_versions/"
 export PATH="$N_PREFIX/bin:$PATH"
 export GOPATH="$HOME/go"
+export SOFTWARES_PATH="/usr/softwares/"
+export NVM_DIR="$HOME/.nvm"
 # export PATH="/usr/softwares/node-v14.16.0-linux-x64/bin:$PATH"
 # Enable vim shortcuts in bash
 set -o vi
@@ -25,6 +27,9 @@ set -o vi
 
 # Adding custom paths to system path
 export PATH="/usr/local/lib:$PATH"  # npm global install location.
+
+# Adding path to my softwares to system path
+export PATH="$SOFTWARES_PATH:$PATH"  # path to custom softwares like neovim, fzf etc.
 
 # Go path
 export PATH=$PATH:/usr/local/go/bin 
@@ -67,7 +72,6 @@ export starship=~/.config/starship.toml
 
 ##########################neovim / lvim##########################
 
-alias 'vim'='lvim'
 alias 'v'='lvim'
 alias 'neovim'='nvim'
 alias 'nvim'='neovim'
