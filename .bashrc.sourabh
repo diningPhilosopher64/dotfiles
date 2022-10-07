@@ -1,6 +1,6 @@
 #######################################################################################################
-
 #                                               My Stuff
+
 
 ########################################################################################################
 
@@ -11,8 +11,9 @@ export LD_LIBRARY_PATH="/usr/softwares/clang_12/bin/"
 export N_PREFIX="/usr/softwares/node_versions/"
 export PATH="$N_PREFIX/bin:$PATH"
 export GOPATH="$HOME/go"
-export SOFTWARES_PATH="/usr/softwares/"
-export NVM_DIR="$HOME/.nvm"
+export SOFTWARES_PATH="/usr/softwares"
+export SOFTLINKS_DIRECTORY="/usr/softlinks" 
+
 # export PATH="/usr/softwares/node-v14.16.0-linux-x64/bin:$PATH"
 # Enable vim shortcuts in bash
 set -o vi
@@ -26,10 +27,10 @@ set -o vi
 . "$HOME/.cargo/env"
 
 # Adding custom paths to system path
-export PATH="/usr/local/lib:$PATH"  # npm global install location.
+# export PATH="/usr/local/lib:$PATH"  # npm global install location.
 
-# Adding path to my softwares to system path
-export PATH="$SOFTWARES_PATH:$PATH"  # path to custom softwares like neovim, fzf etc.
+# Adding path to my all custom soflinks to system path
+export PATH="$SOFTLINKS_DIRECTORY:$PATH"  # path to custom softwares like neovim, fzf etc.
 
 # Go path
 export PATH=$PATH:/usr/local/go/bin 
@@ -70,6 +71,11 @@ shopt -s cdable_vars
 export projects=/sandbox/skondapa/Projects/fte                                  
 export starship=~/.config/starship.toml   
 
+
+
+########################## nvm ##########################
+export NVM_DIR="$HOME/.nvm"
+source ~/.nvm/nvm.sh
 ##########################neovim / lvim##########################
 
 alias 'v'='lvim'

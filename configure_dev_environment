@@ -32,74 +32,110 @@ function print {
 
 
 function configure_bashrc {
+    print "Setting up custom bashrc..."
     if [ -f "$BASH_RC_FILE" ]; then
-        print "Found file $BASH_RC_FILE"
+        echo "Found file $BASH_RC_FILE"
     else
         print "No existing file found at $BASH_RC_FILE. Creating one..."
         touch "$BASH_RC_FILE"
     fi
 
     if grep -q -F "$MY_BASH_RC_FILE_NAME" "$BASH_RC_FILE"; then 
-        print "Found $MY_BASH_RC_FILE_NAME reference in $BASH_RC_FILE. Doing nothing..."
+        echo "Found $MY_BASH_RC_FILE_NAME reference in $BASH_RC_FILE. Doing nothing..."
     else
         echo  "source $DOTFILES_PATH/$MY_BASH_RC_FILE_NAME" >> "$BASH_RC_FILE" 
-        print "Sourced $MY_BASH_RC_FILE_NAME in $BASH_RC_FILE"
+        echo "Sourced $MY_BASH_RC_FILE_NAME in $BASH_RC_FILE"
+        source ~/.bashrc
     fi
 }
 
 
-function setup_softwares {
-    if [ ! -d "$SOFTWARES_PATH" ]; then
-        print "$SOFTWARES_PATH doesn't exist. Creating it..." 
-        sudo mkdir "$SOFTWARES_PATH"
-    fi
 
-    setup_fzf
-    setup_node
-    configure_editor
+function setup_softlinks_directory {
+    sudo mkdir -p $SOFTLINKS_DIRECTORY
+}
+
+function setup_python {
+    print "Setting up miniconda3 using python3 version on the system"
+    miniconda3_path="$SOFTWARES_PATH/miniconda3"
+    PREFIX="${SOFTWARES_PATH}/miniconda3"
+
+    if [ -d "$miniconda3_path" ]; then
+        echo "Found miniconda3 folder at $miniconda3_path"
+    else
+        echo "No miniconda3 folder at $miniconda3_path"
+        python_command=""
+        python3_version=`python3 -c 'import sys
+print("".join((sys.version).split(".")[0:2]))'`
+
+        url="https://repo.anaconda.com/miniconda/Miniconda3-py${python3_version}_4.12.0-Linux-x86_64.sh"
+        wget -O "miniconda3.sh" $url >/dev/null 2>&1
+        sudo bash ./miniconda3.sh -b -u -p $miniconda3_path 
+        sudo ln -s "$miniconda3_path/bin/conda" "$SOFTLINKS_DIRECTORY/conda"
+        echo "Softlinked conda to $SOFTLINKS_DIRECTORY"
+        rm miniconda3.sh
+    fi
 
 }
 
 function setup_node {
+     print "Setting up node"
      if [ ! -z `which node` ]; then
-       print "Found Node.js executable on PATH. Skipping download..."
+       echo "Found Node.js executable on PATH. Skipping download..."
      else
-       print "Downloading nvm..."
+       echo "Downloading nvm..."
        wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-       print "Installing latest node version"
+       source ~/.nvm/nvm.sh
+       echo "Installing latest node version"
        nvm install node
      fi
 }
 
 function setup_fzf {
-  print "Checking if fzf is installed"
-  
-    if [ ! -z `find $SOFTWARES_PATH -name fzf` ]; then
-      print "Found fzf executable at $SOFTWARES_PATH"
+    print "Setting up fzf"
+    fzf_path="$SOFTWARES_PATH/fzf"
+    if [ -d "$fzf_path" ]; then
+      echo "Found fzf folder at $SOFTWARES_PATH"
     else 
-      print "Downloading fzf v0.34.0..."
-      wget -O "fzf.tar.gz" "https://github.com/junegunn/fzf/releases/download/0.34.0/fzf-0.34.0-linux_amd64.tar.gz"      
-      print "Extracting..."
+      echo "fzf not found at $SOFTWARES_PATH. Installing..."
+      sudo mkdir $fzf_path
+
+      # Using release tar
+
+      echo "Downloading fzf v0.34.0..."
+      wget -O "fzf.tar.gz" "https://github.com/junegunn/fzf/releases/download/0.34.0/fzf-0.34.0-linux_amd64.tar.gz" >/dev/null 2>&1
+      echo "Extracting..."
       tar -xvf fzf.tar.gz 
-      print "Moved fzf to $SOFTWARES_PATH"
-      sudo mv fzf $SOFTWARES_PATH
+      echo "Moved fzf to $fzf_path" 
+      sudo mv fzf $fzf_path
+      rm fzf.tar.gz
+      sudo ln -s "$fzf_path/fzf" "$SOFTLINKS_DIRECTORY/fzf"
+      echo "Softlinked to $SOFTLINKS_DIRECTORY/fzf"
+
+      # Using git clone 
+      # sudo git clone --depth 1 https://github.com/junegunn/fzf.git $fzf_path
+      # "$fzf_path/install"
     fi
 }
 
 
 function configure_editor {
     print "Configuring Editor..."
-    print "Checking if neovim exists ?"
-    if [ ! -z `find $SOFTWARES_PATH -name nvim.*` ]; then
-        print "Found neovim executable at $SOFTWARES_PATH. Skipping download..."
+    echo "Checking if neovim exists ?"
+    nvim_path="$SOFTWARES_PATH/nvim"
+    # if [ ! -z `find $SOFTWARES_PATH -name nvim.*` ]; then
+    if [ -d "$nvim_path" ]; then
+        echo "Found neovim executable at $nvim_path. Skipping download..."
     else
-        print "neovim executable not found in path. Fetching the latest stable version of neovim"
-        wget "https://github.com/neovim/neovim/releases/download/stable/nvim.appimage"
+        sudo mkdir $nvim_path
+        echo "neovim folder not found in $nvim_path. Fetching the latest stable version of neovim"
+        wget "https://github.com/neovim/neovim/releases/download/stable/nvim.appimage" >/dev/null 2>&1
         chmod u+x nvim.appimage
-        print "Moving nvim.appimage to $SOFTWARES_PATH"
-        sudo mv ./nvim.appimage $SOFTWARES_PATH
-        # sudo ln -s $SOFTWARES_PATH/nvim.appimage /usr/bin/nvim
+        echo "Moving nvim.appimage to $nvim_path"
+        sudo mv ./nvim.appimage $nvim_path
+        sudo ln -s "$nvim_path/nvim.appimage" "$SOFTLINKS_DIRECTORY/nvim"
+        echo "Softlinked to $SOFTLINKS_DIRECTORY/nvim"
     fi
 
   print "Configure either Neovim or Lunarvim. Press 1 for Neovim or 2 for lunarvim"
@@ -114,47 +150,50 @@ function configure_editor {
 
 
 function configure_lunarvim {
-    print "Checking if lunarvim is installed..."
      if [ ! -z `which lvim` ]; then
-         print "Found lvim on PATH. Skipping installation"
+         print "Setting up Lunarvim..."
+         echo "Found lvim on PATH. Skipping installation"
      else
         bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh) -y --no-install-dependencies
-        print "Successfully installed lunarvim with no optional dependencies"
+        echo "Successfully installed lunarvim with no optional dependencies"
+        echo "Go to ~/.config/lvim/. Open lvim, open config.lua and do :w. This should install all plugins"
      fi
 
-  print "Configuring lunarvim..."
+  echo "Configuring lunarvim..."
 
   init_file="init.lua"
   if grep -q -F "$init_file" "$LUNARVIM_CONFIG_FILE_PATH"; then 
-      print "Found $init_file reference in $LUNARVIM_CONFIG_FILE_PATH. Doing nothing..."
+      echo "Found $init_file reference in $LUNARVIM_CONFIG_FILE_PATH. Doing nothing..."
   else
       content="\n\n\n-- Sourabh's custom config\nlocal user = os.getenv(\"USER\")\nlocal init_path = string.format(\"/home/%s/dotfiles/lvim/init.lua\", user)\ndofile(init_path)" 
       echo -e "$content" >> "$LUNARVIM_CONFIG_FILE_PATH" 
-      print "Sourced content in $LUNARVIM_CONFIG_FILE_PATH"
+      echo "Sourced content in $LUNARVIM_CONFIG_FILE_PATH"
   fi
 }
 
 
 function configure_neovim {
+    print "Setting up Neovim..."
 
     if [ -d "$NEOVIM_PATH" ]; then
-       print "$NEOVIM_PATH already exists. Do you want to delete the existing folder ?" 
+       echo "$NEOVIM_PATH already exists. Do you want to delete the existing folder ?" 
        read -p "Continue (y/n)?" choice
 
        if [ "$choice" = "y" ]; then
           cp -r "$DOTFILES_PATH/nvim" "/home/$USER/.config/"
-          print "You need to run PackerSync/Install" 
+          echo "You need to run PackerSync/Install" 
         else   
-          print "Not replacing neovim config"
+          echo "Not replacing neovim config"
        fi
 
     else
-       print "$NEOVIM_PATH doesnt exist. Copying nvim folder from $DOTFILES_PATH." 
+       echo "$NEOVIM_PATH doesnt exist. Copying nvim folder from $DOTFILES_PATH." 
        cp -r "$DOTFILES_PATH/nvim" "/home/$USER/.config/" && print "You need to run PackerSync/Install"
     fi
 }
 
 function configure_tmux {
+    print "Setting up tmux..."
     if [ -f "$TMUX_CONF_FILE" ]; then
         print "Found file $TMUX_CONF_FILE"
     else
@@ -175,10 +214,21 @@ function configure_tmux {
     fi
 }
 
+function setup_softwares {
+    print "Setting up custom softwares..."
+    if [ ! -d "$SOFTWARES_PATH" ]; then
+        echo "$SOFTWARES_PATH doesn't exist. Creating it..." 
+        sudo mkdir "$SOFTWARES_PATH"
+    fi
+
+    setup_softlinks_directory
+    setup_fzf
+    setup_python
+    setup_node
+    configure_editor
+}
+
 # Modify ~/.bashrc
 configure_bashrc
-
-# Source it to load new changes
-source ~/.bashrc
 
 setup_softwares
