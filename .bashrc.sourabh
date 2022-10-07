@@ -68,14 +68,15 @@ fi
 # params passed can be aliases with the below cmd.
                                                                                 
 shopt -s cdable_vars                                                            
-export projects=/sandbox/skondapa/Projects/fte                                  
+export projects=/mathworks/devel/sandbox/skondapa/Projects/fte                                  
+export dotfiles=~/dotfiles/
 export starship=~/.config/starship.toml   
 
 
 
 ########################## nvm ##########################
 export NVM_DIR="$HOME/.nvm"
-source ~/.nvm/nvm.sh
+
 ##########################neovim / lvim##########################
 
 alias 'v'='lvim'

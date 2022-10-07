@@ -86,16 +86,35 @@ function setup_node {
        echo "Downloading nvm..."
        wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-       source ~/.nvm/nvm.sh
+       source "$NVM_DIR/nvm"
        echo "Installing latest node version"
        nvm install node
      fi
 }
 
+function setup_go {
+    print "Setting up go 1.18"
+    go_path="$SOFTWARES_PATH/go"
+    if [ -d "$go_path" ]; then
+        echo "Found go folder at $SOFTWARES_PATH"
+    else
+        echo "go not found at $SOFTWARES_PATH. Installing..."
+        go_zip="go.tar.gz"
+        wget -O "$go_zip" https://go.dev/dl/go1.18.7.linux-amd64.tar.gz >/dev/null 2>&1
+        echo "Extracting..."
+        mkdir go && tar -C go -xvf $go_zip
+        echo "Moving to $SOFTWARES_PATH"
+        sudo mv go/* $go_path
+        rm $go_zip
+        echo "Softlinking to $SOFTLINKS_DIRECTORY"
+        sudo ln -s "$go_path/bin/go" "$SOFTLINKS_DIRECTORY/go"
+    fi
+}
+
 function setup_fzf {
     print "Setting up fzf"
-    fzf_path="$SOFTWARES_PATH/fzf"
     if [ -d "$fzf_path" ]; then
+    fzf_path="$SOFTWARES_PATH/fzf"
       echo "Found fzf folder at $SOFTWARES_PATH"
     else 
       echo "fzf not found at $SOFTWARES_PATH. Installing..."
@@ -195,7 +214,7 @@ function configure_neovim {
 function configure_tmux {
     print "Setting up tmux..."
     if [ -f "$TMUX_CONF_FILE" ]; then
-        print "Found file $TMUX_CONF_FILE"
+        echo "Found file $TMUX_CONF_FILE"
     else
         print "No existing file found at $TMUX_CONF_FILE. Creating one..."
         touch "$TMUX_CONF_FILE"
@@ -221,11 +240,12 @@ function setup_softwares {
         sudo mkdir "$SOFTWARES_PATH"
     fi
 
-    setup_softlinks_directory
-    setup_fzf
-    setup_python
-    setup_node
-    configure_editor
+    # setup_softlinks_directory
+    # setup_fzf
+    # setup_python
+    # setup_node
+    setup_go
+    # configure_editor
 }
 
 # Modify ~/.bashrc
