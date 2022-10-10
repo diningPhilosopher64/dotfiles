@@ -55,8 +55,12 @@ function configure_bashrc {
 
 
 
-function setup_softlinks_directory {
+function setup_directories {
     sudo mkdir -p $SOFTLINKS_DIRECTORY
+    sudo chown $USER -R $SOFTLINKS_DIRECTORY
+
+    sudo mkdir -p $SOFTWARES_PATH
+    sudo chown $USER -R $SOFTWARES_PATH
 }
 
 function setup_python {
@@ -77,39 +81,39 @@ print("".join((sys.version).split(".")[0:2]))'`
         wget -O "miniconda3.sh" $url >/dev/null 2>&1
 
         echo "Installing miniconda3"
-        sudo bash ./miniconda3.sh -b -u -p $miniconda3_path >/dev/null 2>&1
-        sudo ln -s "$miniconda3_path/bin/conda" "$SOFTLINKS_DIRECTORY/conda"
+        bash ./miniconda3.sh -b -u -p $miniconda3_path >/dev/null 2>&1
+        ln -s "$miniconda3_path/bin/conda" "$SOFTLINKS_DIRECTORY/conda"
         echo "Softlinked conda to $SOFTLINKS_DIRECTORY"
         rm miniconda3.sh
 
         echo "Installing mamba..."
-        conda install -c conda-forge -y mamba
-        conda config --set auto_activate_base false
+        # sudo `which conda` install -c conda-forge -y mamba
+        conda install -c conda-forge -y mamba 
         conda deactivate
+        conda config --set auto_activate_base false
     fi
 
 }
 
 function setup_nvm {
-     print "Goto nvm's github page for installation."
-     print " To make it available for other users, you'll need to softlink to $SOFTLINKS_DIRECTORY"
-     # # unset PREFIX
-     # if [ ! -z `which nvm` ]; then
-     #   echo "Found nvm executable on PATH. Skipping download..."
+     unset PREFIX
+     if [ ! -z `which nvm` ]; then
+       echo "Found nvm executable on PATH. Skipping download..."
 
-     # else
-     #   rm -rf $NVM_DIR
-     #   echo "Downloading nvm..."
-     #   wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-     #   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-     #   source "$NVM_DIR/nvm.sh"
+     else
+       rm -rf $NVM_DIR
+       mkdir -p $NVM_DIR
+       echo "Downloading nvm..."
+       wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+       # source "$NVM_DIR/nvm.sh"
 
-     #   # echo "Softlinking..."
-     #   # sudo ln -s "$NVM_DIR/nvm.sh" "$SOFTLINKS_DIRECTORY/nvm"
-
-     #   echo "To install node 16, use: nvm install 16"
-     #   # nvm install node
-     # fi
+       echo "Softlinking..."
+       # ln -s "$NVM_DIR/nvm.sh" "$SOFTLINKS_DIRECTORY/nvm"
+       export NVM_DIR="/usr/softwares/nvm"
+       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+       echo "To install node 16, use: nvm install 16"
+       # nvm install node
+     fi
 }
 
 function setup_go {
@@ -131,13 +135,13 @@ function setup_go {
         mkdir $local_go_folder && tar -C go -xvf $go_zip >/dev/null 2>&1
 
         echo "Moving to $SOFTWARES_PATH"
-        sudo mv "$local_go_folder/go" $go_path
+        mv "$local_go_folder/go" $go_path
 
         rm $go_zip
         rm -rf $local_go_folder
 
         echo "Softlinking to $SOFTLINKS_DIRECTORY"
-        sudo ln -s "$go_path/bin/go" "$SOFTLINKS_DIRECTORY/go"
+        ln -s "$go_path/bin/go" "$SOFTLINKS_DIRECTORY/go"
     fi
 }
 
@@ -148,7 +152,7 @@ function setup_fzf {
       echo "Found fzf folder at $SOFTWARES_PATH"
     else 
       echo "fzf not found at $SOFTWARES_PATH. Installing..."
-      sudo mkdir $fzf_path
+      mkdir $fzf_path
 
       # Using release tar
 
@@ -157,9 +161,9 @@ function setup_fzf {
       echo "Extracting..."
       tar -xvf fzf.tar.gz 
       echo "Moved fzf to $fzf_path" 
-      sudo mv fzf $fzf_path
+      mv fzf $fzf_path
       rm fzf.tar.gz
-      sudo ln -s "$fzf_path/fzf" "$SOFTLINKS_DIRECTORY/fzf"
+      ln -s "$fzf_path/fzf" "$SOFTLINKS_DIRECTORY/fzf"
       echo "Softlinked to $SOFTLINKS_DIRECTORY/fzf"
 
       # Using git clone 
@@ -177,13 +181,13 @@ function configure_editor {
     if [ -d "$nvim_path" ]; then
         echo "Found neovim executable at $nvim_path. Skipping download..."
     else
-        sudo mkdir $nvim_path
+        mkdir $nvim_path
         echo "neovim folder not found in $nvim_path. Fetching the latest stable version of neovim"
         wget "https://github.com/neovim/neovim/releases/download/stable/nvim.appimage" >/dev/null 2>&1
         chmod u+x nvim.appimage
         echo "Moving nvim.appimage to $nvim_path"
-        sudo mv ./nvim.appimage $nvim_path
-        sudo ln -s "$nvim_path/nvim.appimage" "$SOFTLINKS_DIRECTORY/nvim"
+        mv ./nvim.appimage $nvim_path
+        ln -s "$nvim_path/nvim.appimage" "$SOFTLINKS_DIRECTORY/nvim"
         echo "Softlinked to $SOFTLINKS_DIRECTORY/nvim"
     fi
 
@@ -286,7 +290,7 @@ function setup_starship {
 
 function setup_utilities {
     # Custom Softlinks directory. All of them in 1 place.
-    setup_softlinks_directory
+    setup_directories
     sleep $SLEEP_DURATION
     setup_tmux
     sleep $SLEEP_DURATION
