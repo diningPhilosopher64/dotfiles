@@ -70,6 +70,8 @@ fi
 shopt -s cdable_vars                                                            
 export projects=/mathworks/devel/sandbox/skondapa/Projects/fte                                  
 export dotfiles=~/dotfiles/
+export softwares=/usr/softwares/
+export softlinks=/usr/softlinks/
 export starship=~/.config/starship.toml   
 
 
