@@ -77,7 +77,10 @@ export starship=~/.config/starship.toml
 
 
 ########################## nvm ##########################
-export NVM_DIR="$SOFTWARES_PATH/nvm"
+
+export NVM_DIR="/usr/softwares/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
 
 ##########################neovim / lvim##########################
 

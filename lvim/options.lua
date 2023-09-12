@@ -38,7 +38,7 @@ local options = {
     numberwidth = 4, -- set number column width to 2 {default 4}
     signcolumn = "yes", -- always show the sign column, otherwise it would shift the text each time
     wrap = false, -- display lines as one long line
-    foldmethod = "syntax", -- display lines as one long line
+    foldmethod = "indent", 
 }
 
 vim.opt.shortmess:append "c"
@@ -46,6 +46,7 @@ vim.opt.shortmess:append "c"
 for k, v in pairs(options) do
     vim.opt[k] = v
 end
+
 
 vim.cmd "set whichwrap+=<,>,[,],h,l"
 vim.cmd "set backspace=indent,eol,start"

@@ -10,7 +10,7 @@ export TMUX_CONF_FILE="/home/$USER/.tmux.conf"
 export MY_TMUX_CONF_FILE_NAME=".tmux.conf.sourabh"
 export NEOVIM_EXECUTABLE_PATH=`which nvim`
 export CONFIG_PATH="/home/$USER/.config"
-export SLEEP_DURATION=0
+export SLEEP_DURATION=2
 
 mkdir -p $CONFIG_PATH
 
@@ -105,19 +105,22 @@ function setup_nvm {
        mkdir -p $NVM_DIR
        echo "Downloading nvm..."
        wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-       # source "$NVM_DIR/nvm.sh"
+       source "$NVM_DIR/nvm.sh"
 
        echo "Softlinking..."
        # ln -s "$NVM_DIR/nvm.sh" "$SOFTLINKS_DIRECTORY/nvm"
-       export NVM_DIR="/usr/softwares/nvm"
+       
        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
        echo "To install node 16, use: nvm install 16"
        # nvm install node
      fi
+
+#      export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 }
 
 function setup_go {
-    print "Setting up go 1.18"
+    print "Setting up the latest version of go"
 
     go_path="$SOFTWARES_PATH/go"
     local_go_folder="$PWD/go"
@@ -128,7 +131,7 @@ function setup_go {
     else
         echo "go not found at $SOFTWARES_PATH. Installing..."
 
-        wget -O "$go_zip" https://go.dev/dl/go1.18.7.linux-amd64.tar.gz >/dev/null 2>&1
+        wget -O "$go_zip" https://go.dev/dl/go1.21.1.linux-amd64.tar.gz >/dev/null 2>&1
 
         echo "Extracting..."
         rm -rf $local_go_folder
@@ -222,6 +225,10 @@ function configure_lunarvim {
       echo -e "$content" >> "$LUNARVIM_CONFIG_FILE_PATH" 
       echo "Sourced content in $LUNARVIM_CONFIG_FILE_PATH"
   fi
+
+    #   Download packer 
+    mkdir -p ~/dotfiles/my-nvim-plugins/packer
+    git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/dotfiles/my-nvim-plugins/packer
 }
 
 
@@ -302,12 +309,12 @@ function setup_utilities {
 }
 
 function setup_languages {
-    setup_python
-    sleep $SLEEP_DURATION
+     setup_python
+     sleep $SLEEP_DURATION
     setup_nvm
     sleep $SLEEP_DURATION
-    setup_go
-    sleep $SLEEP_DURATION
+     setup_go
+     sleep $SLEEP_DURATION
 }
 
 function setup_softwares {
@@ -322,7 +329,24 @@ function setup_softwares {
     configure_editor
 }
 
+function install_font {
+    sudo apt-get install -y ttf-mscorefonts-installer
+    mkdir -p ~/.fonts
+    FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip"
+    TARGET_DIR="~/dotfiles"
+    wget -P "$TARGET_DIR" "$FONT_URL"
+    unzip "$TARGET_DIR/FiraCode.zip" -d "~/.fonts"
+    rm "$TARGET_DIR/FiraCode.zip"
+    fc-cache -f -v
+    source ~/.bashrc
+}
+
 # Modify ~/.bashrc
 configure_bashrc
-
+install_font
 setup_softwares
+
+
+echo "Change your default terminal font to NerdFont"
+echo "Manually install nvm from github"
+echo "Run ':Lazy sync' to fix any plugin related issues" 
