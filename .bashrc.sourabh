@@ -68,7 +68,7 @@ fi
 # params passed can be aliases with the below cmd.
                                                                                 
 shopt -s cdable_vars                                                            
-export projects=/mathworks/devel/sandbox/skondapa/Projects/fte                                  
+export projects=/mathworks/HYD/devel/sandbox/skondapa/Projects/fte                                  
 export dotfiles=~/dotfiles/
 export softwares=/usr/softwares/
 export softlinks=/usr/softlinks/
