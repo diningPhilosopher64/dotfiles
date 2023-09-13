@@ -338,6 +338,14 @@ function install_font {
     unzip "$TARGET_DIR/FiraCode.zip" -d "~/.fonts"
     rm "$TARGET_DIR/FiraCode.zip"
     fc-cache -f -v
+
+    FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Hack.zip"
+    TARGET_DIR="~/dotfiles"
+    wget -P "$TARGET_DIR" "$FONT_URL"
+    unzip "$TARGET_DIR/HackNerdFont.zip" -d "~/.fonts"
+    rm "$TARGET_DIR/HackNerdFont.zip"
+    fc-cache -f -v
+
     source ~/.bashrc
 }
 

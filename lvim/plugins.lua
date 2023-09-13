@@ -58,14 +58,23 @@ lvim.plugins = {
     -- repeat - plugin level commands.
     { "tpope/vim-repeat" },
 
+    -- lualine 
+    {
+        "nvim-lualine/lualine.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+    }, 
+
+    -- icons 
+    {'nvim-tree/nvim-web-devicons'}, 
+
     -- {
     --   "nvim-neorg/neorg",
     --   ft = "norg", -- lazy-load on filetype
     --   config = true, -- run require("neorg").setup()
     -- },
+
 }
 
 
 -- Load leap.nvim with default mappings
 require('leap').add_default_mappings()
-
