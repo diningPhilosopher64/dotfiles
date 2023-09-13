@@ -66,8 +66,9 @@ bind-key "C-b" new-window -n "switching-window" " /bin/bash -c '~/.tmux/plugins/
 TMUX_FZF_OPTIONS="-d 100%"
 TMUX_FZF_PREVIEW=0
 
+
+
 # Tmux plugins
-# List of plugins
 set -g @plugin 'tmux-plugins/tpm'
 
 # To save and resurrect tmux
@@ -76,6 +77,13 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 
 # Enable tmux sessio switching integrated with fzf
 set -g @plugin 'sainnhe/tmux-fzf'
+
+
+# plugin related config 
+
+# set -g status-right 'Autosave:#{continuum_status}'
+set -g @continuum-restore 'on'
+set -g @continuum-save-interval '60'
 
 # To save neovim state
 set -g @resurrect-strategy-nvim 'session'

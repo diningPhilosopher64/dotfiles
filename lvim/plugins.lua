@@ -50,14 +50,22 @@ lvim.plugins = {
 
 
     -- move around faster 
-    { "ggandor/lightspeed.nvim" },
+    { "ggandor/leap.nvim" },
 
     -- surround text easily
     { "tpope/vim-surround" },
+
+    -- repeat - plugin level commands.
+    { "tpope/vim-repeat" },
 
     -- {
     --   "nvim-neorg/neorg",
     --   ft = "norg", -- lazy-load on filetype
     --   config = true, -- run require("neorg").setup()
     -- },
-  }
+}
+
+
+-- Load leap.nvim with default mappings
+require('leap').add_default_mappings()
+

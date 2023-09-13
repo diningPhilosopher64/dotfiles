@@ -16,4 +16,5 @@ dofile(current_dir .. "plugins.lua")
 
 -- Load language servers 
 dofile(current_dir ..  "language_servers" .. "/" .. "python.lua")
+dofile(current_dir ..  "language_servers" .. "/" .. "go.lua")
 
