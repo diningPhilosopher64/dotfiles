@@ -47,6 +47,7 @@ lvim.plugins = {
 
     -- golang
     { "fatih/vim-go", build = ':GoUpdateBinaries' },
+      {"leoluz/nvim-dap-go"},
 
 
     -- move around faster 
