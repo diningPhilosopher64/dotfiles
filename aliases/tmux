@@ -104,7 +104,7 @@ function tmux_sessionizer {
 
     personal_directories=(~/work ~/work/personal)                                   
     
-    office_directories=(/sandbox/skondapa/Projects/fte/)
+    office_directories=(/mathworks/HYD/devel/sandbox/skondapa/Projects/fte/)
     
     all_directories+=( "${current_working_dir[@]}" "${personal_directories[@]}"  "${office_directories[@]}" "${common_directories[@]}" )
 
