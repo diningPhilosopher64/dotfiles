@@ -24,7 +24,7 @@ set -o vi
 # ssh-add path_to_private_key
 
 # Added by cargo ?
-. "$HOME/.cargo/env"
+# . "$HOME/.cargo/env"
 
 # Adding custom paths to system path
 # export PATH="/usr/local/lib:$PATH"  # npm global install location.
@@ -163,6 +163,9 @@ extract () {
 # Shutdown and restart
 alias shutdown='shutdown -h now'
 alias restart='shutdown -r now'
+alias power="upower -i $(upower -e | grep '/battery') | grep -E '\state|to\ full|to\ empty|percentage'"
+alias battery=power
+
 
 # bash history specific config
 # HISTCONTROL=ignorespace:ignoredups
