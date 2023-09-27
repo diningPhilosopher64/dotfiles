@@ -20,8 +20,6 @@ lvim.keys.normal_mode["J"] = "mzJ`z"
 -- Switch to Normal mode quickly from home row
 lvim.keys.insert_mode["jk"] = { "<ESC>", { noremap = true } }
 lvim.keys.insert_mode["kj"] = { "<ESC>", { noremap = true } }
-lvim.keys.insert_mode["jj"] = { "<ESC>", { noremap = true } }
-lvim.keys.insert_mode["kk"] = { "<ESC>", { noremap = true } }
 
 -- If in insert mode and want to move line of code, switch to normal/visual mode and
 -- use those remaps

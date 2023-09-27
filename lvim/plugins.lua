@@ -31,7 +31,18 @@ lvim.plugins = {
          -- refer to the configuration section below
         },
     },
-    
+
+    -- Preview function definition
+    {
+        'rmagatti/goto-preview',
+      config = function()
+        require('goto-preview').setup({
+                references = { -- Configure the telescope UI for slowing the references cycling window.
+    telescope = require("telescope.themes").get_dropdown({ hide_preview = false, layout_config = { width=0.99 }})
+  };
+            })
+      end
+    },
 
     -- moves ui inputs from command window slot to pop-ups
     {
@@ -63,10 +74,10 @@ lvim.plugins = {
     {
         "nvim-lualine/lualine.nvim",
         dependencies = { "nvim-tree/nvim-web-devicons" },
-    }, 
+    },
 
     -- icons 
-    {'nvim-tree/nvim-web-devicons'}, 
+    {'nvim-tree/nvim-web-devicons'},
 
     -- {
     --   "nvim-neorg/neorg",
@@ -79,3 +90,8 @@ lvim.plugins = {
 
 -- Load leap.nvim with default mappings
 require('leap').add_default_mappings()
+
+-- peek definition
+lvim.keys.normal_mode["gpd"] = {"<cmd>lua require('goto-preview').goto_preview_definition()<CR>"  , { noremap = true } }
+lvim.keys.normal_mode["gpc"] = {"<cmd>lua require('goto-preview').close_all_win()<CR>"  , { noremap = true } }
+lvim.keys.normal_mode["gpr"] = {"<cmd>lua require('goto-preview').goto_preview_references()<CR>"  , { noremap = true } }
