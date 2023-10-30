@@ -79,6 +79,10 @@ lvim.plugins = {
     -- icons 
     {'nvim-tree/nvim-web-devicons'},
 
+    -- go debugging
+    {  "leoluz/nvim-dap-go"}, 
+    
+
     -- {
     --   "nvim-neorg/neorg",
     --   ft = "norg", -- lazy-load on filetype
