@@ -43,7 +43,7 @@ format = "via [🐋 $context](blue bold)"
 
 [git_branch]
 symbol = ""
-truncation_length = 14 
+truncation_length = 25
 truncation_symbol = "……"
 style= "bold fg:black bg:white"
 format = "On $symbol [$branch]($style) "

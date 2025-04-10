@@ -8,22 +8,22 @@
 
 #create new venv
 function cmkvenv {
-   mkdir -p /usr/softwares/miniconda3/envs/"$1"
+   mkdir -p /local-ssd/miniconda3/envs/"$1"
 #  mamba create -n "$1" --prefix=/usr/softwares/miniconda3/envs/"$1" python="$2" -y
-  conda create  --prefix=/usr/softwares/miniconda3/envs/"$1" python="$2" -y
+  conda create  --prefix=/local-ssd/miniconda3/envs/"$1" python="$2" -y
 }
 alias 'cmkenv'='cmkvenv'
 
 # remove arbitrary number of conda virtual envs
 function crmenv {
-  mamba env remove -n "$@"
+  conda env remove -n "$@"
 }
 
 alias 'crmvenv'='crmenv'
 
 #list envs
-alias 'clsenv'='mamba env list'
-alias 'clsvenv'='mamba env list'
+alias 'clsenv'='conda env list'
+alias 'clsvenv'='conda env list'
 
 # list packages in an env
 function clspkg {
@@ -45,7 +45,7 @@ function caenv {
 }
 
 #deactivate venv
-alias "cdvenv"="conda deactivate"
+alias "cdvenv"="conda deactivate; conda deactivate"
 alias "cdenv"="cdvenv"
 
 #add channels in conda
@@ -55,7 +55,8 @@ function caddc {
         echo "Provide a channel name to add!"
         #exit 1;
     else
-        mamba config --add channels "$1"
+        #mamba config --add channels "$1"
+        conda config --add channels "$1"
     fi
 }
 
@@ -63,9 +64,9 @@ function caddc {
 function cip {
     if [ -z "$2" ]
     then
-        /usr/softwares/miniconda3/condabin/mamba install -y "$1"
+        /local-ssd/miniconda3/condabin/mamba install -y "$1"
     else
-         /usr/softwares/miniconda3/condabin/mamba install -c "$2" "$1"
+         /local-ssd/miniconda3/condabin/mamba install -c "$2" "$1"
     fi
 }
 
@@ -84,14 +85,14 @@ function crmch {
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/usr/softwares/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/local-ssd/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/usr/softwares/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/usr/softwares/miniconda3/etc/profile.d/conda.sh"
+    if [ -f "/local-ssd/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/local-ssd/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/usr/softwares/miniconda3/bin:$PATH"
+        export PATH="/local-ssd/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup

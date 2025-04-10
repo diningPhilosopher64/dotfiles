@@ -69,6 +69,12 @@ TMUX_FZF_PREVIEW=0
 
 
 # Tmux plugins
+# Press Prefix + I (default: Ctrl+B + I) to install the plugins.
+
+# Save and Restore Sessions:
+# Save a session: Press Prefix + Ctrl+S.
+# Restore a session: Press Prefix + Ctrl+R.
+
 set -g @plugin 'tmux-plugins/tpm'
 
 # To save and resurrect tmux
@@ -78,12 +84,18 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 # Enable tmux sessio switching integrated with fzf
 set -g @plugin 'sainnhe/tmux-fzf'
 
+set -g @plugin 'tmux-plugins/tmux-sensible' # optional recommended
+
+set -g @plugin 'egel/tmux-gruvbox'
+# set desired theme options...
+set -g @tmux-gruvbox 'dark256' # or 'dark256', 'light', 'light256'
+
 
 # plugin related config 
 
 # set -g status-right 'Autosave:#{continuum_status}'
 set -g @continuum-restore 'on'
-set -g @continuum-save-interval '60'
+set -g @continuum-save-interval '15'
 
 # To save neovim state
 set -g @resurrect-strategy-nvim 'session'
