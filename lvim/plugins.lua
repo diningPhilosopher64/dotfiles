@@ -110,6 +110,15 @@ lvim.plugins = {
 
 
     -- Language specific plugins
+  
+    -- python
+    {"mfussenegger/nvim-dap-python", ft="python", 
+  dependencies = {
+      "mfussenegger/nvim-dap", 
+    }},
+    {"nvim-neotest/neotest"},
+    {"nvim-neotest/neotest-python"},
+
 
     -- golang
     { "fatih/vim-go", build = ':GoUpdateBinaries' },
@@ -149,6 +158,10 @@ lvim.plugins = {
 
 -- Load leap.nvim with default mappings
 require('leap').add_default_mappings()
+
+lvim.builtin.dap.active = true
+local mason_path = vim.fn.glob(vim.fn.stdpath "data" .. "/mason/")
+require("dap-python").setup(mason_path .. "packages/debugpy/venv/bin/python")
 
 -- peek definition
 lvim.keys.normal_mode["gpd"] = {"<cmd>lua require('goto-preview').goto_preview_definition()<CR>"  , { noremap = true } }

@@ -11,6 +11,7 @@ export PATH="$N_PREFIX/bin:$PATH"
 export GOPATH="$HOME/go"
 export SOFTWARES_PATH="/usr/softwares"
 export SOFTLINKS_DIRECTORY="/usr/softlinks" 
+export JAVA_HOME=`type -p java|xargs readlink -f|xargs dirname|xargs dirname`
 
 # export PATH="/usr/softwares/node-v14.16.0-linux-x64/bin:$PATH"
 # Enable vim shortcuts in bash
@@ -35,10 +36,10 @@ export PATH=$PATH:/usr/local/go/bin
 
 # Adding anaconda executables to path 
 
-if [ -d /usr/softwares/miniconda3/bin ]; then
+# if [ -d /usr/softwares/miniconda3/bin ]; then
     # Add to system path if directory exists
-    export PATH="/usr/softwares/miniconda3/bin:$PATH"
-fi
+    # export PATH="/usr/softwares/miniconda3/bin:$PATH"
+# fi
 
 # enable color support of ls and also add handy aliases                         
 if [ -x /usr/bin/dircolors ]; then                                              
@@ -85,6 +86,7 @@ export NVM_DIR="/usr/softwares/nvm"
 alias 'v'='lvim'
 alias 'neovim'='nvim'
 alias 'nvim'='neovim'
+alias 'editor'='docker run -it --rm -v $(pwd):/workspace --user $(id -u):$(id -g) editor:latest'
 
 ##########################fzf##########################
 
